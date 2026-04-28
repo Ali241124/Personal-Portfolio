@@ -13,7 +13,7 @@ const timeline = [
   },
   {
     year: "2022 – Present",
-    title: "BS Computer Science",
+    title: "BS Software Engineering",
     place: "University Of Central Punjab, Lahore",
     type: "education",
     description: "Pursuing a degree with focus on Artificial Intelligence, Machine Learning, Data Structures, Algorithms, and Software Engineering.",

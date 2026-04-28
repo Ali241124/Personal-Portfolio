@@ -2,9 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = SpeechRecognition ? new SpeechRecognition() : null;
-
 export default function SyedAI() {
   const [isOpen, setIsOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
@@ -14,6 +11,21 @@ export default function SyedAI() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef(null);
+  const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition && !recognitionRef.current) {
+      recognitionRef.current = new SpeechRecognition();
+      
+      recognitionRef.current.onstart = () => setIsListening(true);
+      recognitionRef.current.onend = () => setIsListening(false);
+      recognitionRef.current.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        handleSend(transcript);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -66,27 +78,16 @@ export default function SyedAI() {
 
   const toggleListening = () => {
     if (isListening) {
-      recognition?.stop();
+      recognitionRef.current?.stop();
       window.speechSynthesis.cancel(); // Stop AI from speaking
     } else {
-      if (!recognition) {
+      if (!recognitionRef.current) {
         alert("Speech recognition not supported in this browser.");
         return;
       }
-      recognition.start();
+      recognitionRef.current.start();
     }
   };
-
-  useEffect(() => {
-    if (!recognition) return;
-
-    recognition.onstart = () => setIsListening(true);
-    recognition.onend = () => setIsListening(false);
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      handleSend(transcript);
-    };
-  }, [messages]);
 
   return (
     <>
