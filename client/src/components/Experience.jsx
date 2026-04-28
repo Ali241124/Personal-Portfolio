@@ -14,7 +14,7 @@ const timeline = [
   {
     year: "2022 – Present",
     title: "BS Computer Science",
-    place: "University — Karachi, Pakistan",
+    place: "University Of Central Punjab, Lahore",
     type: "education",
     description: "Pursuing a degree with focus on Artificial Intelligence, Machine Learning, Data Structures, Algorithms, and Software Engineering.",
     tags: ["AI", "ML", "Algorithms", "Data Structures"],
