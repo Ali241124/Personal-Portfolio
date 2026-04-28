@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 const ROLES = ["AI / ML Engineer", "Deep Learning Developer", "Python Developer", "Data Scientist"];
 
 // Particle canvas background
-function ParticleNetwork() {
+// Neural Network Background with Data Pulses
+function NeuralNetwork() {
   const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -20,15 +21,18 @@ function ParticleNetwork() {
     };
     window.addEventListener("resize", resize);
 
-    const NODES = 55;
+    const NODES = 60;
     const nodes = Array.from({ length: NODES }, () => ({
       x: Math.random() * W, y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+      vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
       r: Math.random() * 2 + 1,
+      pulses: []
     }));
 
     const draw = () => {
       ctx.clearRect(0, 0, W, H);
+      
+      // Update & Draw nodes
       nodes.forEach(n => {
         n.x += n.vx; n.y += n.vy;
         if (n.x < 0 || n.x > W) n.vx *= -1;
@@ -36,29 +40,51 @@ function ParticleNetwork() {
 
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(0,212,255,0.55)";
+        ctx.fillStyle = "rgba(0,212,255,0.4)";
         ctx.fill();
       });
+
+      // Draw connections & pulses
       for (let i = 0; i < NODES; i++) {
         for (let j = i + 1; j < NODES; j++) {
           const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 130) {
+          
+          if (dist < 150) {
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(0,212,255,${0.15 * (1 - dist / 130)})`;
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = `rgba(0,212,255,${0.12 * (1 - dist / 150)})`;
+            ctx.lineWidth = 0.6;
             ctx.stroke();
+
+            // Occasional pulses
+            if (Math.random() < 0.0008) {
+              nodes[i].pulses.push({ target: nodes[j], progress: 0 });
+            }
           }
         }
+
+        // Draw active pulses
+        nodes[i].pulses = nodes[i].pulses.filter(p => {
+          p.progress += 0.02;
+          const px = nodes[i].x + (p.target.x - nodes[i].x) * p.progress;
+          const py = nodes[i].y + (p.target.y - nodes[i].y) * p.progress;
+          
+          ctx.beginPath();
+          ctx.arc(px, py, 2, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(0,212,255,0.8)";
+          ctx.fill();
+          
+          return p.progress < 1;
+        });
       }
       animId = requestAnimationFrame(draw);
     };
     draw();
     return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", resize); };
   }, []);
-  return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, opacity: 0.6 }} />;
+  return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, opacity: 0.5 }} />;
 }
 
 // Typing animation
@@ -104,7 +130,7 @@ export default function Hero() {
       background: "var(--gradient-hero)", overflow: "hidden",
     }}>
       <div className="grid-bg" />
-      <ParticleNetwork />
+      <NeuralNetwork />
 
       {/* Glow orbs */}
       <div style={{

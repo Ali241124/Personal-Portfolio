@@ -131,23 +131,23 @@ export default function Projects() {
             {filtered.map((project, i) => (
               <motion.div
                 key={project.title}
-                layout
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, delay: i * 0.07 }}
-                whileHover={{ y: -6 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ 
+                  y: -10,
+                  rotateX: 5,
+                  rotateY: -5,
+                  scale: 1.02,
+                  boxShadow: `0 20px 40px ${project.color}25, 0 0 0 1px ${project.color}40`
+                }}
                 className="glass"
                 style={{
-                  padding: "28px", cursor: "default",
-                  transition: "box-shadow 0.3s ease",
-                  overflow: "hidden", position: "relative"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = `0 8px 40px ${project.color}25, 0 0 0 1px ${project.color}30`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "";
+                  padding: "28px",
+                  position: "relative",
+                  perspective: "1000px",
+                  transformStyle: "preserve-3d"
                 }}
               >
                 {/* Color accent top bar */}

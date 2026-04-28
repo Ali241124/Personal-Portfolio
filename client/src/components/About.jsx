@@ -115,11 +115,18 @@ export default function About() {
               {stats.map(({ label, value }, i) => (
                 <motion.div
                   key={label}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ delay: 0.5 + i * 0.1, duration: 0.5 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                  whileHover={{ 
+                    y: -8, 
+                    scale: 1.05, 
+                    borderColor: "var(--accent-blue)",
+                    boxShadow: "0 10px 30px rgba(0, 212, 255, 0.2)"
+                  }}
                   className="glass"
-                  style={{ padding: "20px", textAlign: "center" }}
+                  style={{ padding: "20px", textAlign: "center", cursor: "default" }}
                 >
                   <div style={{
                     fontSize: "32px", fontWeight: 800,

@@ -1,3 +1,4 @@
+import { motion, useScroll, useSpring } from "framer-motion";
 import './index.css'
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -7,10 +8,37 @@ import Projects from "./components/Projects";
 import Experience from "./components/Experience";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import SyedAI from "./components/SyedAI";
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  return (
+    <motion.div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "4px",
+        background: "var(--gradient-primary)",
+        transformOrigin: "0%",
+        zIndex: 1001,
+        scaleX
+      }}
+    />
+  );
+}
 
 function App() {
   return (
     <div style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', overflowX: 'hidden' }}>
+      <ScrollProgress />
       <Navbar />
       <main>
         <Hero />
@@ -20,6 +48,7 @@ function App() {
         <Experience />
         <Contact />
       </main>
+      <SyedAI />
       <Footer />
     </div>
   );

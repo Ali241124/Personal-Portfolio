@@ -87,13 +87,18 @@ export default function Navbar() {
         </motion.a>
 
         {/* Desktop Nav */}
-        <ul style={{ display: "flex", gap: "4px", listStyle: "none", alignItems: "center" }} className="desktop-nav">
+        <ul style={{ display: "flex", gap: "6px", listStyle: "none", alignItems: "center" }} className="desktop-nav">
           {navLinks.map((link) => (
             <li key={link.href}>
               <motion.a
                 href={link.href}
                 onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-                whileHover={{ color: "var(--accent-blue)" }}
+                whileHover={{ 
+                  scale: 1.1,
+                  color: "var(--accent-blue)",
+                  y: -2
+                }}
+                whileTap={{ scale: 0.95 }}
                 style={{
                   padding: "8px 14px",
                   borderRadius: "8px",
@@ -103,7 +108,7 @@ export default function Navbar() {
                   display: "block",
                   color: activeSection === link.href.slice(1) ? "var(--accent-blue)" : "var(--text-secondary)",
                   background: activeSection === link.href.slice(1) ? "rgba(0,212,255,0.08)" : "transparent",
-                  transition: "all 0.2s ease",
+                  transition: "all 0.2s cubic-bezier(0.23, 1, 0.32, 1)",
                   textDecoration: "none",
                 }}
               >
@@ -115,11 +120,15 @@ export default function Navbar() {
             <motion.a
               href="#contact"
               onClick={(e) => { e.preventDefault(); scrollTo("#contact"); }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ 
+                scale: 1.05,
+                y: -3,
+                boxShadow: "0 10px 30px rgba(0, 212, 255, 0.4)"
+              }}
               whileTap={{ scale: 0.97 }}
               style={{
                 marginLeft: "8px",
-                padding: "9px 20px",
+                padding: "9px 24px",
                 borderRadius: "10px",
                 background: "linear-gradient(135deg, #00d4ff, #7c3aed)",
                 color: "white",

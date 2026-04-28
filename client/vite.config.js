@@ -5,8 +5,18 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/contact': 'http://localhost:5000',
-      '/health': 'http://localhost:5000',
+      '/contact': {
+        target: 'http://127.0.0.1:5000',
+        changeOrigin: true,
+      },
+      '/health': {
+        target: 'http://127.0.0.1:5000',
+        changeOrigin: true,
+      },
+      '/jarvis': {
+        target: 'http://127.0.0.1:5000',
+        changeOrigin: true,
+      },
     }
   }
 })
