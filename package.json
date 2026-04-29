@@ -1,0 +1,24 @@
+{
+  "name": "portfolio-monorepo",
+  "version": "1.0.0",
+  "description": "Full-stack portfolio with React and Express",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "client-install": "npm install --prefix client",
+    "client-build": "npm run build --prefix client",
+    "server-install": "npm install --prefix server",
+    "deploy": "npm run client-build"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.0",
+    "nodemailer": "^8.0.2",
+    "openai": "^6.34.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

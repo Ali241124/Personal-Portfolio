@@ -13,10 +13,14 @@ app.use(cors()); // Allow all for solving connection issue
 app.use(express.json());
 
 // MongoDB connection
-mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.warn("⚠️  MongoDB not connected:", err.message));
+if (process.env.MONGO_URI) {
+  mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => console.log("✅ MongoDB connected"))
+    .catch((err) => console.warn("⚠️  MongoDB connection error:", err.message));
+} else {
+  console.warn("⚠️  MONGO_URI not found. Database features will not work.");
+}
 
   const transporter = nodemailer.createTransport({
   service: "gmail",
