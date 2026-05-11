@@ -10,8 +10,19 @@ export default function SyedAI() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [voices, setVoices] = useState([]);
   const scrollRef = useRef(null);
   const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    const loadVoices = () => {
+      const v = window.speechSynthesis.getVoices();
+      if (v.length > 0) setVoices(v);
+    };
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+    return () => { window.speechSynthesis.onvoiceschanged = null; };
+  }, []);
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -33,21 +44,23 @@ export default function SyedAI() {
     }
   }, [messages]);
 
-  // Text to Speech with Fixed Voice
+  // Text to Speech with Fixed Male Voice
   const speak = (text) => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 1.0;
-    utterance.pitch = 1.0;
+    utterance.pitch = 0.9; // Slightly lower pitch for more "male" feel
     
-    // Pick ONE consistent voice and stick to it
-    const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find(v => v.name.includes("Google UK English Male")) || 
-                    voices.find(v => v.lang === "en-GB") || 
-                    voices.find(v => v.lang === "en-US") ||
-                    voices[0];
-                    
-    if (preferred) utterance.voice = preferred;
+    // Pick a consistent MALE voice
+    const maleVoice = voices.find(v => 
+      (v.name.toLowerCase().includes("male") || 
+       v.name.toLowerCase().includes("david") || 
+       v.name.toLowerCase().includes("james") ||
+       v.name.toLowerCase().includes("mark")) && 
+      v.lang.startsWith("en")
+    ) || voices.find(v => v.lang.startsWith("en"));
+                     
+    if (maleVoice) utterance.voice = maleVoice;
     window.speechSynthesis.speak(utterance);
   };
 
@@ -77,9 +90,9 @@ export default function SyedAI() {
   };
 
   const toggleListening = () => {
+    window.speechSynthesis.cancel(); // Stop AI immediately when mic is clicked
     if (isListening) {
       recognitionRef.current?.stop();
-      window.speechSynthesis.cancel(); // Stop AI from speaking
     } else {
       if (!recognitionRef.current) {
         alert("Speech recognition not supported in this browser.");

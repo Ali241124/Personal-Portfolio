@@ -32,24 +32,42 @@ function processRAGQuery(query) {
     vector: vectorize(c)
   }));
 
-  // 2. RETRIEVAL: Find top matching chunk
+  // 2. RETRIEVAL: Find top matching chunks (Multi-chunk retrieval)
   const scored = chunks.map(chunk => ({
     ...chunk,
     score: calculateSimilarity(queryVec, chunk.vector)
-  })).sort((a, b) => b.score - a.score);
+  }))
+  .filter(chunk => chunk.score > 0)
+  .sort((a, b) => b.score - a.score);
 
-  const bestMatch = scored[0];
-  const context = bestMatch && bestMatch.score > 0 ? bestMatch.text : "No specific data found.";
-
-  // 3. GENERATION (Template-based Local Synthesizer)
-  const greetings = ["Scanning my neural core...", "Analyzing portfolio data...", "Retrieving Syed's work records..."];
-  const prefix = greetings[Math.floor(Math.random() * greetings.length)];
-
-  if (bestMatch && bestMatch.score > 0) {
-    return `${prefix} I found relevant info: ${bestMatch.text.substring(0, 400)}... Is there anything specific about this you'd like to explore?`;
+  // 3. GENERATION (Improved Synthesizer)
+  if (scored.length === 0) {
+    return "I'm Syed's Assistant. I can tell you about his AI/ML projects (like MNIST or YOLO), his tech stack (React, Python), his experience, or provide his CV and contact links. What would you like to know?";
   }
 
-  return "I'm Syed's Local AI. I can guide you through his Projects, Skills, and Experience. Try asking 'What tech stack does Syed use?'";
+  // If query is broad, include more chunks
+  const isBroadQuery = query.toLowerCase().includes("syed") || query.toLowerCase().includes("user") || query.toLowerCase().includes("all") || query.toLowerCase().includes("details");
+  const topMatches = isBroadQuery ? scored.slice(0, 3) : scored.slice(0, 2);
+  
+  const combinedContext = topMatches.map(m => m.text).join("\n\n");
+  
+  const greetings = ["Scanning my neural core...", "Analyzing portfolio data...", "Retrieving Syed's work records...", "Accessing encrypted data..."];
+  const prefix = greetings[Math.floor(Math.random() * greetings.length)];
+
+  let response = `${prefix}\n\n`;
+  
+  // Format the response more naturally
+  if (combinedContext.includes("Projects") && combinedContext.includes("Bio")) {
+    response += "I've compiled a comprehensive overview of Syed's profile and projects for you:\n\n";
+  } else if (combinedContext.includes("Stack")) {
+    response += "Here is the technical infrastructure Syed works with:\n\n";
+  } else {
+    response += "Here is the information I found relevant to your query:\n\n";
+  }
+
+  response += combinedContext;
+
+  return response;
 }
 
 module.exports = { processRAGQuery };

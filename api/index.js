@@ -12,17 +12,19 @@ const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/portfolio"
 app.use(cors()); // Allow all for solving connection issue
 app.use(express.json());
 
-// MongoDB connection
+// MongoDB connection with timeout
 if (process.env.MONGO_URI) {
   mongoose
-    .connect(process.env.MONGO_URI)
+    .connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000, // 5 seconds timeout
+    })
     .then(() => console.log("✅ MongoDB connected"))
     .catch((err) => console.warn("⚠️  MongoDB connection error:", err.message));
 } else {
   console.warn("⚠️  MONGO_URI not found. Database features will not work.");
 }
 
-  const transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
@@ -48,25 +50,35 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok", mongo: mongoose.connection.readyState === 1 ? "connected" : "disconnected" });
 });
 
-// Contact route (existing)
+// Contact route (improved reliability)
 app.post("/contact", async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
     if (!name || !email || !message) {
       return res.status(400).json({ error: "Name, email, and message are required." });
     }
-    const contact = new Contact({ name, email, subject, message });
-    await contact.save();
+
+    // Try to save to DB, but don't block email if DB fails
+    try {
+      if (mongoose.connection.readyState === 1) {
+        const contact = new Contact({ name, email, subject, message });
+        await contact.save();
+      }
+    } catch (dbErr) {
+      console.error("Database save failed, continuing with email:", dbErr.message);
+    }
+
     await transporter.sendMail({
       from: email,
       to: process.env.EMAIL_USER,
       subject: `Portfolio Contact: ${subject || "New Message"}`,
       text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`
     });
+
     res.json({ success: true, message: "Message sent successfully!" });
   } catch (err) {
     console.error("Contact error:", err.message);
-    res.status(500).json({ error: "Server error." });
+    res.status(500).json({ error: "Could not send message. Please check your connection or try again later." });
   }
 });
 
