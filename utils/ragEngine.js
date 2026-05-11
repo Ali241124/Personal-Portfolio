@@ -6,10 +6,17 @@ const { getDynamicKnowledge } = require('./knowledgeEngine');
  */
 
 // Simple Vectorizer: Converts text into a word-count map (TF-Vector)
+// Added stop-words to prevent broad matching on common words like "Syed"
+const STOP_WORDS = new Set(["syed", "user", "portfolio", "details", "about", "give", "tell", "what", "where", "how", "with", "from", "this", "that"]);
+
 function vectorize(text) {
   const words = text.toLowerCase().match(/\w+/g) || [];
   const freq = {};
-  words.forEach(w => { if (w.length > 3) freq[w] = (freq[w] || 0) + 1; });
+  words.forEach(w => { 
+    if (w.length > 2 && !STOP_WORDS.has(w)) {
+      freq[w] = (freq[w] || 0) + 1; 
+    }
+  });
   return freq;
 }
 
@@ -32,7 +39,7 @@ function processRAGQuery(query) {
     vector: vectorize(c)
   }));
 
-  // 2. RETRIEVAL: Find top matching chunks (Multi-chunk retrieval)
+  // 2. RETRIEVAL: Find top matching chunks
   const scored = chunks.map(chunk => ({
     ...chunk,
     score: calculateSimilarity(queryVec, chunk.vector)
@@ -40,29 +47,29 @@ function processRAGQuery(query) {
   .filter(chunk => chunk.score > 0)
   .sort((a, b) => b.score - a.score);
 
-  // 3. GENERATION (Improved Synthesizer)
+  // 3. GENERATION
   if (scored.length === 0) {
-    return "I'm Syed's Assistant. I can tell you about his AI/ML projects (like MNIST or YOLO), his tech stack (React, Python), his experience, or provide his CV and contact links. What would you like to know?";
+    return "I'm Syed's Assistant. I can tell you about his AI/ML projects (like MNIST or YOLO), tech stack, experience, or provide his CV and contact links. What would you like to know?";
   }
 
-  // If query is broad, include more chunks
-  const isBroadQuery = query.toLowerCase().includes("syed") || query.toLowerCase().includes("user") || query.toLowerCase().includes("all") || query.toLowerCase().includes("details");
-  const topMatches = isBroadQuery ? scored.slice(0, 3) : scored.slice(0, 2);
+  // Precision Logic: Only include secondary chunks if they are nearly as relevant as the top one
+  const topScore = scored[0].score;
+  const matches = scored.filter(m => m.score >= topScore * 0.8); // 80% similarity threshold compared to best
   
-  const combinedContext = topMatches.map(m => m.text).join("\n\n");
+  // Limit to max 2 chunks unless it's a very specific query that hits many things
+  const finalMatches = matches.slice(0, 2);
+  const combinedContext = finalMatches.map(m => m.text).join("\n\n");
   
-  const greetings = ["Scanning my neural core...", "Analyzing portfolio data...", "Retrieving Syed's work records...", "Accessing encrypted data..."];
+  const greetings = ["Scanning my neural core...", "Analyzing portfolio data...", "Retrieving Syed's work records..."];
   const prefix = greetings[Math.floor(Math.random() * greetings.length)];
 
   let response = `${prefix}\n\n`;
   
-  // Format the response more naturally
-  if (combinedContext.includes("Projects") && combinedContext.includes("Bio")) {
-    response += "I've compiled a comprehensive overview of Syed's profile and projects for you:\n\n";
-  } else if (combinedContext.includes("Stack")) {
-    response += "Here is the technical infrastructure Syed works with:\n\n";
+  // Natural lead-in
+  if (finalMatches.length > 1) {
+    response += "I've found information across a few areas of Syed's portfolio:\n\n";
   } else {
-    response += "Here is the information I found relevant to your query:\n\n";
+    response += "Here are the details I found:\n\n";
   }
 
   response += combinedContext;
