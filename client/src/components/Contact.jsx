@@ -64,7 +64,12 @@ export default function Contact() {
       setForm({ name: "", email: "", subject: "", message: "" });
       showToast("success", "Message sent! I'll get back to you soon.");
     } catch (err) {
-      const errorMsg = err.response?.data?.details || err.response?.data?.error || "Could not send message. Please try again.";
+      let errorMsg = "Could not send message. Please try again.";
+      if (err.response) {
+        errorMsg = err.response.data.details || err.response.data.error || errorMsg;
+      } else if (err.request) {
+        errorMsg = "No response from server. Please check your internet connection.";
+      }
       showToast("error", errorMsg);
     } finally {
       setLoading(false);
