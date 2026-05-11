@@ -63,8 +63,9 @@ export default function Contact() {
       await axios.post("/contact", form);
       setForm({ name: "", email: "", subject: "", message: "" });
       showToast("success", "Message sent! I'll get back to you soon.");
-    } catch {
-      showToast("error", "Could not send message. Please try again.");
+    } catch (err) {
+      const errorMsg = err.response?.data?.details || err.response?.data?.error || "Could not send message. Please try again.";
+      showToast("error", errorMsg);
     } finally {
       setLoading(false);
     }
