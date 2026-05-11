@@ -54,6 +54,13 @@ app.get("/health", (req, res) => {
 app.post("/contact", async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
+    
+    // Debugging logs (Check Vercel Logs for these)
+    console.log("Contact request received from:", email);
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("CRITICAL: EMAIL_USER or EMAIL_PASS environment variables are missing!");
+    }
+
     if (!name || !email || !message) {
       return res.status(400).json({ error: "Name, email, and message are required." });
     }
@@ -63,22 +70,32 @@ app.post("/contact", async (req, res) => {
       if (mongoose.connection.readyState === 1) {
         const contact = new Contact({ name, email, subject, message });
         await contact.save();
+        console.log("Message saved to database.");
+      } else {
+        console.warn("MongoDB not connected. Skipping DB save.");
       }
     } catch (dbErr) {
-      console.error("Database save failed, continuing with email:", dbErr.message);
+      console.error("Database save failed:", dbErr.message);
     }
 
+    console.log("Attempting to send email via Gmail...");
     await transporter.sendMail({
-      from: email,
+      from: process.env.EMAIL_USER, // Gmail requires 'from' to be the authenticated user
+      replyTo: email, // Set user's email here so you can reply directly
       to: process.env.EMAIL_USER,
       subject: `Portfolio Contact: ${subject || "New Message"}`,
       text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`
     });
-
+    
+    console.log("Email sent successfully!");
     res.json({ success: true, message: "Message sent successfully!" });
   } catch (err) {
-    console.error("Contact error:", err.message);
-    res.status(500).json({ error: "Could not send message. Please check your connection or try again later." });
+    console.error("Contact service error:", err.message);
+    // Return a more descriptive error for debugging (User can see this in devtools)
+    res.status(500).json({ 
+      error: "Could not send message.",
+      details: err.message.includes("Invalid login") ? "Email authentication failed. Check App Password." : "Server error."
+    });
   }
 });
 
