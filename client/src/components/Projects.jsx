@@ -4,12 +4,12 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 const projects = [
   {
     title: "MNIST Digit Classifier",
-    desc: "A high-accuracy CNN model built with TensorFlow/Keras to classify handwritten digits from the MNIST dataset. Achieved 99.2% test accuracy with data augmentation and dropout regularization.",
+    desc: "A high-accuracy CNN model built with TensorFlow/Keras to classify handwritten digits from the MNIST dataset. Achieved 98.8% test accuracy with data augmentation and dropout regularization.",
     tags: ["Python", "TensorFlow", "CNN", "Keras"],
     category: "ai-ml",
     emoji: "🧠",
     color: "#00d4ff",
-    github: "https://github.com/",
+    github: "https://mnist-digit-classifier-two.vercel.app/",
     demo: null,
   },
   {
@@ -135,7 +135,7 @@ export default function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ 
+                whileHover={{
                   y: -10,
                   rotateX: 5,
                   rotateY: -5,
