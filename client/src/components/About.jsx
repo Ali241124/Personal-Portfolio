@@ -58,17 +58,17 @@ export default function About() {
               <div style={{
                 position: "absolute", inset: 0,
                 background: "linear-gradient(135deg, rgba(0,212,255,0.05) 0%, transparent 60%)"
-              }}/>
+              }} />
               <img
-              src="/profile.jpeg"
-              alt="Syed Ali Hassan"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                borderRadius: "20px"
+                src="/profile.jpeg"
+                alt="Syed Ali Hassan"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  borderRadius: "20px"
                 }}
-                />
+              />
             </div>
 
             {/* Interest chips */}
@@ -103,7 +103,7 @@ export default function About() {
             </p>
             <p style={{ color: "var(--text-secondary)", lineHeight: 1.9, fontSize: "16px", marginBottom: "36px" }}>
               I specialize in designing and training neural networks using <strong style={{ color: "var(--accent-blue)" }}>
-              TensorFlow & PyTorch</strong>, building scalable backend APIs, and creating seamless user
+                TensorFlow & PyTorch</strong>, building scalable backend APIs, and creating seamless user
               experiences with React. I'm always exploring the latest breakthroughs in LLMs and generative AI.
             </p>
 
@@ -119,9 +119,9 @@ export default function About() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
-                  whileHover={{ 
-                    y: -8, 
-                    scale: 1.05, 
+                  whileHover={{
+                    y: -8,
+                    scale: 1.05,
                     borderColor: "var(--accent-blue)",
                     boxShadow: "0 10px 30px rgba(0, 212, 255, 0.2)"
                   }}
@@ -142,7 +142,7 @@ export default function About() {
             </div>
 
             <motion.a
-              href="/SyedAliHassan-Resume.pdf"
+              href="/SyedAliHassan-Resume(AI).pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
