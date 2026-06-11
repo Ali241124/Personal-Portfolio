@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { motion, useScroll, useSpring } from "framer-motion";
 import './index.css'
 import Navbar from "./components/Navbar";
@@ -9,6 +10,7 @@ import Experience from "./components/Experience";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import SyedAI from "./components/SyedAI";
+import AllProjects from "./pages/AllProjects";
 
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
@@ -35,7 +37,7 @@ function ScrollProgress() {
   );
 }
 
-function App() {
+function HomePage() {
   return (
     <div style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', overflowX: 'hidden' }}>
       <ScrollProgress />
@@ -51,6 +53,17 @@ function App() {
       <SyedAI />
       <Footer />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/projects" element={<AllProjects />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
