@@ -11,6 +11,8 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import SyedAI from "./components/SyedAI";
 import AllProjects from "./pages/AllProjects";
+import Achievements from "./components/Achievements";
+import AllAchievements from "./pages/AllAchievements";
 
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
@@ -47,6 +49,7 @@ function HomePage() {
         <About />
         <Skills />
         <Projects />
+        <Achievements />
         <Experience />
         <Contact />
       </main>
@@ -62,6 +65,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/projects" element={<AllProjects />} />
+        <Route path="/achievements" element={<AllAchievements />} />
       </Routes>
     </BrowserRouter>
   );
