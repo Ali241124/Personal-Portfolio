@@ -34,7 +34,7 @@ const skillGroups = [
   },
   {
     category: "Web Development",
-    color: "#ec4899",
+    color: "#7c3aed", // updated to purple accent
     skills: [
       { name: "React", icon: <FaReact />, level: 82 },
       { name: "Node.js", icon: <FaNodeJs />, level: 78 },

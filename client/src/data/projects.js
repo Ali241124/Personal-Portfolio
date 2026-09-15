@@ -50,7 +50,7 @@ const projects = [
     tags: ["React Native", "Node.js", "MongoDB", "Express"],
     category: "web",
     emoji: "🚗",
-    color: "#ec4899",
+    color: "#7c3aed",
     github: "https://github.com/",
     demo: null,
     featured: false,

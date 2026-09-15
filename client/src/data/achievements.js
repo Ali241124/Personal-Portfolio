@@ -46,7 +46,7 @@ const achievements = [
     date: "July 2024",
     desc: "Learned modern web application development with React, Redux, Node.js, MongoDB, GraphQL, and TypeScript.",
     image: "https://via.placeholder.com/800x600/0f172a/ec4899?text=Full+Stack+Placeholder",
-    color: "#ec4899",
+    color: "#7c3aed",
     featured: false,
   },
 ];

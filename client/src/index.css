@@ -8,7 +8,7 @@
   --accent-blue: #00d4ff;
   --accent-purple: #7c3aed;
   --accent-cyan: #06b6d4;
-  --accent-pink: #ec4899;
+  --accent-pink: #6b7280; // replaced with neutral gray
   --accent-green: #10b981;
 
   --gradient-primary: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
