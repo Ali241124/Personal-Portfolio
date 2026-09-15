@@ -68,3 +68,4 @@ Welcome to my personal portfolio repository! This is a dynamic, fully responsive
 ## 🤝 Let's Connect
 Feel free to reach out to me for collaborations, freelance work, or just to chat about AI and Web Development!
 Added dark mode toggle and updated color palette.
+Added Vercel login steps for deployment.
