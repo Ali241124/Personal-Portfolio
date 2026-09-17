@@ -1,164 +1,122 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-const stats = [
-  { label: "Projects Completed", value: "10+" },
-  { label: "ML Models Deployed", value: "20+" },
-  { label: "Technologies Mastered", value: "15+" },
-  { label: "Years of Learning", value: "3+" },
+const education = [
+  { degree: "MS Artificial Intelligence", school: "UET Lahore", period: "2026 – Present", status: "current" },
+  { degree: "BS Software Engineering",    school: "University of Central Punjab", period: "2022 – 2026", status: "completed" },
 ];
 
-const interests = ["Neural Networks", "Computer Vision", "NLP & LLMs", "Data Science", "Full-Stack Apps", "MLOps"];
+const interests = ["Machine Learning", "NLP & LLMs", "Computer Vision", "Full-Stack Dev", "Data Science", "MLOps"];
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.55, delay, ease: "easeOut" },
+});
 
 export default function About() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="about" ref={ref} style={{ background: "var(--bg-secondary)", position: "relative", overflow: "hidden" }}>
-      <div className="grid-bg" style={{ opacity: 0.5 }} />
-      <div className="section-wrapper" style={{ position: "relative", zIndex: 1 }}>
+    <section id="about" ref={ref} style={{ background: "var(--surface-raised)", position: "relative" }}>
+      <div className="section-wrapper">
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="section-tag">👤 About Me</span>
-          <h2 className="section-title">
-            Passionate About <span className="gradient-text">Intelligent Systems</span>
-          </h2>
-          <p className="section-subtitle" style={{ marginBottom: "60px" }}>
-            Building the bridge between cutting-edge research and real-world applications.
+        <motion.div {...fadeUp()} style={{ marginBottom: 56 }}>
+          <span className="section-label">About Me</span>
+          <h2 className="section-title">A little about me</h2>
+          <p className="section-sub">
+            Engineer and developer with a focus on AI/ML and full-stack applications.
           </p>
         </motion.div>
 
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: "60px", alignItems: "start"
-        }} className="about-grid">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 64, alignItems: "start" }} className="about-grid">
 
-          {/* Left — Bio */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
-          >
-            {/* Avatar placeholder */}
+          {/* Left — photo + interests */}
+          <motion.div {...fadeUp(0.15)}>
             <div style={{
-              width: "100%", maxWidth: 360, aspectRatio: "3/4",
-              borderRadius: "20px", marginBottom: "32px",
-              background: "linear-gradient(135deg, rgba(0,212,255,0.1) 0%, rgba(124,58,237,0.15) 100%)",
-              border: "1px solid var(--border-color)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "100px",
-              boxShadow: "var(--shadow-glow)",
-              position: "relative", overflow: "hidden"
+              width: "100%", aspectRatio: "3 / 4", borderRadius: 16,
+              overflow: "hidden", border: "1px solid var(--border)",
+              background: "var(--surface-card)", marginBottom: 20,
             }}>
-              <div style={{
-                position: "absolute", inset: 0,
-                background: "linear-gradient(135deg, rgba(0,212,255,0.05) 0%, transparent 60%)"
-              }} />
               <img
                 src="/profile.jpeg"
                 alt="Syed Ali Hassan"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  borderRadius: "20px"
-                }}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </div>
-
-            {/* Interest chips */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {interests.map((item) => (
-                <span key={item} style={{
-                  padding: "6px 14px",
-                  background: "rgba(0,212,255,0.06)",
-                  border: "1px solid rgba(0,212,255,0.15)",
-                  borderRadius: "100px",
-                  fontSize: "13px",
-                  color: "var(--accent-cyan)",
-                  fontFamily: "var(--font-mono)",
-                }}>
-                  {item}
-                </span>
+                <span key={item} className="tag">{item}</span>
               ))}
             </div>
           </motion.div>
 
-          {/* Right — Text & Stats */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.3 }}
-          >
-            <p style={{ color: "var(--text-secondary)", lineHeight: 1.9, fontSize: "16px", marginBottom: "20px" }}>
-              I'm <strong style={{ color: "var(--text-primary)" }}>Syed Ali Hassan</strong>, an AI/ML enthusiast
-              and developer passionate about creating intelligent applications that solve real-world problems.
-              My journey started with Python and data science, and has expanded into deep learning,
-              computer vision, and full-stack development.
+          {/* Right — bio */}
+          <motion.div {...fadeUp(0.25)}>
+            <p style={{ fontSize: 16, color: "var(--text-secondary)", lineHeight: 1.8, marginBottom: 20 }}>
+              I'm <strong style={{ color: "var(--text-primary)", fontWeight: 600 }}>Syed Ali Hassan</strong>, 
+              a software engineering graduate from the University of Central Punjab and currently 
+              pursuing an MS in Artificial Intelligence at UET Lahore.
             </p>
-            <p style={{ color: "var(--text-secondary)", lineHeight: 1.9, fontSize: "16px", marginBottom: "36px" }}>
-              I specialize in designing and training neural networks using <strong style={{ color: "var(--accent-blue)" }}>
-                TensorFlow & PyTorch</strong>, building scalable backend APIs, and creating seamless user
-              experiences with React. I'm always exploring the latest breakthroughs in LLMs and generative AI.
+            <p style={{ fontSize: 16, color: "var(--text-secondary)", lineHeight: 1.8, marginBottom: 20 }}>
+              My background is in building full-stack web and mobile applications, 
+              and over the past two years I've shifted more of my focus toward machine learning — 
+              particularly NLP, computer vision, and deploying models as accessible tools.
+            </p>
+            <p style={{ fontSize: 16, color: "var(--text-secondary)", lineHeight: 1.8, marginBottom: 40 }}>
+              I like projects where I can work across the full stack: from data preprocessing 
+              and model training to building the interface that actually lets people use it. 
+              I use Python, React, and Node.js most often.
             </p>
 
-            {/* Stats grid */}
-            <div style={{
-              display: "grid", gridTemplateColumns: "1fr 1fr",
-              gap: "20px", marginBottom: "36px"
-            }}>
-              {stats.map(({ label, value }, i) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
-                  whileHover={{
-                    y: -8,
-                    scale: 1.05,
-                    borderColor: "var(--accent-blue)",
-                    boxShadow: "0 10px 30px rgba(0, 212, 255, 0.2)"
-                  }}
-                  className="glass"
-                  style={{ padding: "20px", textAlign: "center", cursor: "default" }}
-                >
-                  <div style={{
-                    fontSize: "32px", fontWeight: 800,
-                    fontFamily: "var(--font-heading)",
-                    background: "var(--gradient-primary)",
-                    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent"
+            {/* Education cards */}
+            <div style={{ marginBottom: 36 }}>
+              <p className="skill-group-title" style={{ marginBottom: 14 }}>Education</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {education.map(({ degree, school, period, status }) => (
+                  <div key={degree} style={{
+                    padding: "14px 16px",
+                    background: "var(--surface-card)",
+                    border: `1px solid ${status === "current" ? "var(--accent-ring)" : "var(--border)"}`,
+                    borderRadius: 10, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap",
                   }}>
-                    {value}
+                    <div>
+                      <p style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)", marginBottom: 2 }}>{degree}</p>
+                      <p style={{ fontSize: 12, color: "var(--text-secondary)", fontFamily: "var(--font-mono)" }}>{school}</p>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      {status === "current" && (
+                        <span style={{
+                          fontSize: 10, padding: "2px 8px", borderRadius: 100,
+                          background: "var(--accent-glow)", color: "var(--accent)",
+                          fontFamily: "var(--font-mono)", border: "1px solid var(--accent-ring)",
+                        }}>Active</span>
+                      )}
+                      <span style={{ fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{period}</span>
+                    </div>
                   </div>
-                  <div style={{ fontSize: "12px", color: "var(--text-secondary)", marginTop: "4px" }}>{label}</div>
-                </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            <motion.a
+            <a
               href="/SyedAliHassan-Resume(AI).pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary"
+              className="btn-secondary"
               style={{ display: "inline-flex" }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
             >
-              📄 Download CV
-            </motion.a>
+              Download CV ↗
+            </a>
           </motion.div>
         </div>
       </div>
 
       <style>{`
         @media (max-width: 768px) {
-          .about-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .about-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

@@ -1,9 +1,8 @@
 import { useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Link } from "react-router-dom";
 import projects from "../data/projects";
 
-// Only show featured projects on the homepage
 const featuredProjects = projects.filter((p) => p.featured);
 
 export default function Projects() {
@@ -11,113 +10,106 @@ export default function Projects() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="projects" ref={ref} style={{ background: "var(--bg-secondary)", position: "relative", overflow: "hidden" }}>
-      <div className="grid-bg" />
-      <div className="section-wrapper" style={{ position: "relative", zIndex: 1 }}>
-
+    <section id="projects" ref={ref} className="py-24 bg-gray-50 dark:bg-primary-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          style={{ textAlign: "center", marginBottom: "48px" }}
+          className="text-center mb-16"
         >
-          <span className="section-tag">🚀 Projects</span>
-          <h2 className="section-title">
-            Featured <span className="gradient-text">Work</span>
+          <span className="inline-block py-1.5 px-4 rounded-full bg-accent-teal/10 text-accent-teal text-sm font-semibold tracking-wide mb-4">
+            🚀 Projects
+          </span>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
+            Featured <span className="text-accent-teal">Work</span>
           </h2>
-          <p className="section-subtitle" style={{ margin: "0 auto" }}>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             A selection of real-world AI/ML and web projects I've built.
           </p>
         </motion.div>
 
-        {/* Cards grid — only featured */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-          gap: "24px"
-        }}>
-          <AnimatePresence mode="popLayout">
-            {featuredProjects.map((project, i) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{
-                  y: -10,
-                  rotateX: 5,
-                  rotateY: -5,
-                  scale: 1.02,
-                  boxShadow: `0 20px 40px ${project.color}25, 0 0 0 1px ${project.color}40`
-                }}
-                className="glass"
-                style={{
-                  padding: "28px",
-                  position: "relative",
-                  perspective: "1000px",
-                  transformStyle: "preserve-3d"
-                }}
-              >
-                {/* Color accent top bar */}
-                <div style={{
-                  position: "absolute", top: 0, left: 0, right: 0,
-                  height: "3px",
-                  background: `linear-gradient(90deg, ${project.color}, ${project.color}44)`
-                }} />
-
-                {/* Header */}
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "16px" }}>
-                  <div style={{
-                    width: 50, height: 50, borderRadius: "12px",
-                    background: `${project.color}15`,
-                    border: `1px solid ${project.color}30`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "24px"
-                  }}>
+        {/* Cards grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredProjects.map((project, i) => (
+            <motion.div
+              key={project.title}
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="group bg-white dark:bg-primary-900 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-primary-700 relative overflow-hidden flex flex-col h-full"
+            >
+              {/* Image Section */}
+              <div className="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-primary-800">
+                {project.image ? (
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-4xl">
                     {project.emoji}
                   </div>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <a href={project.github} target="_blank" rel="noreferrer"
-                      style={{
-                        width: 34, height: 34, borderRadius: "8px",
-                        background: "rgba(255,255,255,0.05)",
-                        border: "1px solid rgba(255,255,255,0.1)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        color: "var(--text-secondary)", fontSize: "15px", transition: "all 0.2s"
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.color = project.color; e.currentTarget.style.borderColor = project.color; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; }}
-                    >↗</a>
+                )}
+                {/* Color accent top bar overlay */}
+                <div 
+                  className="absolute top-0 left-0 right-0 h-1 z-10" 
+                  style={{ background: project.color || '#0d9488' }} 
+                />
+              </div>
+
+              <div className="p-6 flex flex-col flex-grow">
+                {/* Header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div 
+                      className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
+                      style={{ backgroundColor: `${project.color || '#0d9488'}15` }}
+                    >
+                      {project.emoji}
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white leading-tight">
+                      {project.title}
+                    </h3>
                   </div>
+                  <a 
+                    href={project.github} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-primary-800 flex items-center justify-center text-gray-500 hover:text-accent-teal hover:bg-accent-teal/10 transition-colors shrink-0"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
                 </div>
 
-                <h3 style={{ fontSize: "17px", fontWeight: 700, marginBottom: "10px", color: "var(--text-primary)" }}>
-                  {project.title}
-                </h3>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: "20px" }}>
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6 flex-grow">
                   {project.desc}
                 </p>
 
                 {/* Tags */}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                <div className="flex flex-wrap gap-2 mt-auto">
                   {project.tags.map((tag) => (
-                    <span key={tag} style={{
-                      padding: "4px 10px",
-                      background: `${project.color}10`,
-                      border: `1px solid ${project.color}25`,
-                      borderRadius: "6px",
-                      fontSize: "11px",
-                      color: project.color,
-                      fontFamily: "var(--font-mono)"
-                    }}>
+                    <span 
+                      key={tag} 
+                      className="px-2.5 py-1 rounded-md text-xs font-mono font-medium"
+                      style={{ 
+                        backgroundColor: `${project.color || '#0d9488'}10`,
+                        color: project.color || '#0d9488',
+                        borderColor: `${project.color || '#0d9488'}30`,
+                        borderWidth: '1px'
+                      }}
+                    >
                       {tag}
                     </span>
                   ))}
                 </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         {/* View All Projects button */}
@@ -125,47 +117,22 @@ export default function Projects() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.5 }}
-          style={{ textAlign: "center", marginTop: "56px" }}
+          className="text-center mt-16"
         >
-          {/* Subtle count label */}
-          <p style={{ color: "var(--text-muted)", fontSize: "14px", marginBottom: "20px", fontFamily: "var(--font-mono)" }}>
+          <p className="text-gray-500 text-sm font-mono mb-6">
             Showing {featuredProjects.length} of {projects.length} projects
           </p>
 
-          <Link to="/projects" id="view-all-projects-link">
+          <Link to="/projects">
             <motion.button
-              id="view-all-projects-btn"
-              whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(0,212,255,0.35)" }}
-              whileTap={{ scale: 0.97 }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "12px",
-                padding: "16px 42px",
-                background: "linear-gradient(135deg, rgba(0,212,255,0.12), rgba(124,58,237,0.12))",
-                border: "1px solid rgba(0,212,255,0.35)",
-                borderRadius: "100px",
-                color: "var(--accent-blue)",
-                fontFamily: "var(--font-primary)",
-                fontSize: "15px",
-                fontWeight: 600,
-                cursor: "pointer",
-                backdropFilter: "blur(10px)",
-                transition: "border-color 0.3s",
-                letterSpacing: "0.3px",
-              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white dark:bg-primary-900 border border-gray-200 dark:border-primary-700 text-primary-900 dark:text-white font-medium hover:border-accent-teal hover:text-accent-teal transition-colors shadow-sm group"
             >
               View All Projects
-              <span style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: 28,
-                height: 28,
-                borderRadius: "50%",
-                background: "rgba(0,212,255,0.15)",
-                fontSize: "16px",
-              }}>→</span>
+              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-50 dark:bg-primary-800 group-hover:bg-accent-teal/10">
+                →
+              </span>
             </motion.button>
           </Link>
         </motion.div>

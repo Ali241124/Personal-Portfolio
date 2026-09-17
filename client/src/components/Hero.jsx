@@ -1,269 +1,224 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 
-const ROLES = ["AI / ML Engineer", "Deep Learning Developer", "Python Developer", "Data Scientist"];
-
-// Particle canvas background
-// Neural Network Background with Data Pulses
-function NeuralNetwork() {
+export default function Hero() {
   const canvasRef = useRef(null);
-  useEffect(() => {
+
+  const initCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
+    let W = canvas.width = canvas.offsetWidth;
+    let H = canvas.height = canvas.offsetHeight;
     let animId;
-    let W = window.innerWidth, H = window.innerHeight;
-    canvas.width = W; canvas.height = H;
 
-    const resize = () => {
-      W = window.innerWidth; H = window.innerHeight;
-      canvas.width = W; canvas.height = H;
-    };
-    window.addEventListener("resize", resize);
-
-    const NODES = 60;
-    const nodes = Array.from({ length: NODES }, () => ({
-      x: Math.random() * W, y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
-      r: Math.random() * 2 + 1,
-      pulses: []
+    // Sparse particles
+    const particles = Array.from({ length: 28 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      size: Math.random() * 1.2 + 0.3,
+      speedX: (Math.random() - 0.5) * 0.15,
+      speedY: -Math.random() * 0.25 - 0.05,
+      opacity: Math.random() * 0.35 + 0.05,
     }));
 
     const draw = () => {
       ctx.clearRect(0, 0, W, H);
-      
-      // Update & Draw nodes
-      nodes.forEach(n => {
-        n.x += n.vx; n.y += n.vy;
-        if (n.x < 0 || n.x > W) n.vx *= -1;
-        if (n.y < 0 || n.y > H) n.vy *= -1;
-
+      particles.forEach((p) => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+        if (p.x < -10) p.x = W + 10;
+        if (p.x > W + 10) p.x = -10;
         ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(0,212,255,0.4)";
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(45,212,191,${p.opacity})`;
         ctx.fill();
       });
-
-      // Draw connections & pulses
-      for (let i = 0; i < NODES; i++) {
-        for (let j = i + 1; j < NODES; j++) {
-          const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < 150) {
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(0,212,255,${0.12 * (1 - dist / 150)})`;
-            ctx.lineWidth = 0.6;
-            ctx.stroke();
-
-            // Occasional pulses
-            if (Math.random() < 0.0008) {
-              nodes[i].pulses.push({ target: nodes[j], progress: 0 });
-            }
-          }
-        }
-
-        // Draw active pulses
-        nodes[i].pulses = nodes[i].pulses.filter(p => {
-          p.progress += 0.02;
-          const px = nodes[i].x + (p.target.x - nodes[i].x) * p.progress;
-          const py = nodes[i].y + (p.target.y - nodes[i].y) * p.progress;
-          
-          ctx.beginPath();
-          ctx.arc(px, py, 2, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(0,212,255,0.8)";
-          ctx.fill();
-          
-          return p.progress < 1;
-        });
-      }
       animId = requestAnimationFrame(draw);
     };
-    draw();
-    return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", resize); };
-  }, []);
-  return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, opacity: 0.5 }} />;
-}
 
-// Typing animation
-function TypingText() {
-  const [roleIdx, setRoleIdx] = useState(0);
-  const [displayed, setDisplayed] = useState("");
-  const [deleting, setDeleting] = useState(false);
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!prefersReduced) draw();
+
+    const onResize = () => {
+      W = canvas.width = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    };
+    window.addEventListener("resize", onResize);
+    return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", onResize); };
+  }, []);
 
   useEffect(() => {
-    const role = ROLES[roleIdx];
-    let timeout;
-    if (!deleting && displayed.length < role.length) {
-      timeout = setTimeout(() => setDisplayed(role.slice(0, displayed.length + 1)), 60);
-    } else if (!deleting && displayed.length === role.length) {
-      timeout = setTimeout(() => setDeleting(true), 2000);
-    } else if (deleting && displayed.length > 0) {
-      timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 35);
-    } else if (deleting && displayed.length === 0) {
-      setDeleting(false);
-      setRoleIdx((i) => (i + 1) % ROLES.length);
-    }
-    return () => clearTimeout(timeout);
-  }, [displayed, deleting, roleIdx]);
+    const cleanup = initCanvas();
+    return cleanup;
+  }, [initCanvas]);
 
-  return (
-    <span style={{
-      fontFamily: "var(--font-mono)", fontSize: "clamp(18px, 3vw, 26px)",
-      color: "var(--accent-blue)", display: "inline-block",
-      borderRight: "2px solid var(--accent-blue)",
-      paddingRight: "4px", animation: "blink-cursor 0.8s step-end infinite",
-      minHeight: "40px"
-    }}>
-      {displayed}
-    </span>
-  );
-}
-
-export default function Hero() {
   return (
     <section id="home" style={{
       position: "relative", minHeight: "100vh",
       display: "flex", alignItems: "center",
-      background: "var(--gradient-hero)", overflow: "hidden",
+      background: "var(--surface-base)", overflow: "hidden", paddingTop: 72,
     }}>
-      <div className="grid-bg" />
-      <NeuralNetwork />
+      {/* Subtle animated grid */}
+      <div className="bg-grid" />
 
-      {/* Glow orbs */}
-      <div style={{
-        position: "absolute", width: 600, height: 600, borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)",
-        top: "-100px", right: "-100px", pointerEvents: "none"
-      }} />
-      <div style={{
-        position: "absolute", width: 500, height: 500, borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%)",
-        bottom: "-80px", left: "-80px", pointerEvents: "none"
-      }} />
+      {/* Ambient orbs */}
+      <div className="bg-orb bg-orb-1" />
+      <div className="bg-orb bg-orb-2" />
 
-      <div className="section-wrapper" style={{ position: "relative", zIndex: 1, paddingTop: "120px", maxWidth: "900px" }}>
+      {/* Particle canvas */}
+      <canvas
+        ref={canvasRef}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 1 }}
+        aria-hidden="true"
+      />
 
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="section-tag">
-            <span style={{ fontSize: "8px", color: "#10b981" }}>●</span>
-            &nbsp;Available for opportunities
-          </span>
-        </motion.div>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 2, width: "100%" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: 64 }} className="hero-grid">
 
-        {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          style={{
-            fontSize: "clamp(42px, 7vw, 88px)",
-            fontWeight: 800, letterSpacing: "-2px",
-            lineHeight: 1.05, margin: "20px 0 16px",
-          }}
-        >
-          Hi, I'm{" "}
-          <span className="gradient-text">Syed Ali Hassan</span>
-        </motion.h1>
+          {/* Text */}
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              style={{ marginBottom: 24 }}
+            >
+              <span className="section-label">
+                Currently pursuing MS Artificial Intelligence · UET Lahore
+              </span>
+            </motion.div>
 
-        {/* Typing role */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          style={{ marginBottom: "24px", height: "44px", display: "flex", alignItems: "center" }}
-        >
-          <TypingText />
-        </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.1 }}
+              style={{ fontSize: "clamp(36px, 6vw, 68px)", fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.03em", marginBottom: 8 }}
+            >
+              Hi, I'm{" "}
+              <span style={{ color: "var(--accent)" }}>Syed Ali Hassan</span>
+            </motion.h1>
 
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.45 }}
-          style={{
-            fontSize: "18px", color: "var(--text-secondary)",
-            maxWidth: "560px", lineHeight: 1.75, marginBottom: "40px"
-          }}
-        >
-          Passionate about building intelligent systems — from neural networks
-          and computer vision to NLP and full-stack AI applications. Turning
-          data into decisions, one model at a time.
-        </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.18 }}
+              style={{ fontSize: "clamp(18px, 2.5vw, 24px)", color: "var(--text-secondary)", fontWeight: 400, marginBottom: 24, letterSpacing: "-0.01em" }}
+            >
+              Software Engineer &nbsp;·&nbsp; AI & Full-Stack Developer
+            </motion.p>
 
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}
-        >
-          <motion.a
-            href="#projects"
-            onClick={(e) => { e.preventDefault(); document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" }); }}
-            className="btn-primary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.27 }}
+              style={{ fontSize: 16, color: "var(--text-secondary)", maxWidth: 520, lineHeight: 1.75, marginBottom: 40 }}
+            >
+              I build web applications and integrate AI systems. My work spans from 
+              crafting clean interfaces to training machine learning models and shipping 
+              them as usable products.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+              style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}
+            >
+              <a href="#projects" onClick={(e) => { e.preventDefault(); document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" }); }} className="btn-primary">
+                View Projects
+              </a>
+              <a href="https://github.com/Ali241124" target="_blank" rel="noreferrer" className="btn-secondary">
+                GitHub ↗
+              </a>
+              <a href="/SyedAliHassan-Resume(AI).pdf" target="_blank" rel="noreferrer" className="btn-secondary">
+                Resume ↗
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Personal card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="hero-card-wrap"
           >
-            <span>View Projects</span>
-            <span>→</span>
-          </motion.a>
-          <motion.a
-            href="#contact"
-            onClick={(e) => { e.preventDefault(); document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); }}
-            className="btn-secondary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <span>Get In Touch</span>
-          </motion.a>
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          style={{
-            marginTop: "64px", display: "flex", gap: "40px", flexWrap: "wrap"
-          }}
-        >
-          {[
-            { label: "Projects Built", value: "10+" },
-            { label: "ML Models Trained", value: "20+" },
-            { label: "Technologies", value: "15+" },
-          ].map(({ label, value }) => (
-            <div key={label}>
-              <div style={{ fontSize: "32px", fontWeight: 800, fontFamily: "var(--font-heading)", color: "var(--accent-blue)" }}>
-                {value}
+            <div style={{
+              width: 260, height: 320,
+              background: "var(--surface-card)", border: "1px solid var(--border)",
+              borderRadius: 20, padding: 32,
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              gap: 16, position: "relative", overflow: "hidden",
+            }}>
+              {/* Subtle corner accent */}
+              <div style={{
+                position: "absolute", top: -40, right: -40, width: 120, height: 120,
+                background: "var(--accent-glow)", borderRadius: "50%", filter: "blur(30px)",
+              }} />
+              <div style={{
+                width: 80, height: 80, borderRadius: "50%",
+                background: "var(--surface-raised)", border: "2px solid var(--border-strong)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: "var(--font-mono)", fontSize: 22, fontWeight: 700, color: "var(--accent)",
+                position: "relative", zIndex: 1,
+              }}>
+                AH
               </div>
-              <div style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "2px" }}>{label}</div>
+              <div style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
+                <p style={{ fontSize: 15, fontWeight: 600, color: "var(--text-primary)", marginBottom: 4 }}>Syed Ali Hassan</p>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Software Engineer</p>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%", position: "relative", zIndex: 1 }}>
+                {[
+                  { label: "BS — Software Engineering", sub: "University of Central Punjab" },
+                  { label: "MS — Artificial Intelligence", sub: "UET Lahore · 2026–Present" },
+                ].map(({ label, sub }) => (
+                  <div key={label} style={{
+                    padding: "8px 12px", background: "var(--surface-raised)",
+                    border: "1px solid var(--border-subtle)", borderRadius: 8,
+                  }}>
+                    <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text-primary)", marginBottom: 2 }}>{label}</p>
+                    <p style={{ fontSize: 10, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>{sub}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
+          </motion.div>
+
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          animate={{ y: [0, 7, 0] }}
+          transition={{ repeat: Infinity, duration: 2.2 }}
+          style={{
+            position: "absolute", bottom: -60, left: "50%", transform: "translateX(-50%)",
+            display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+            color: "var(--text-muted)",
+          }}
+        >
+          <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase" }}>scroll</span>
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ repeat: Infinity, duration: 1.8 }}
-        style={{
-          position: "absolute", bottom: "32px", left: "50%",
-          transform: "translateX(-50%)", display: "flex",
-          flexDirection: "column", alignItems: "center", gap: "6px",
-          color: "var(--text-muted)", fontSize: "12px"
-        }}
-      >
-        <span>scroll</span>
-        <span style={{ fontSize: "18px" }}>↓</span>
-      </motion.div>
+      <style>{`
+        .hero-grid {
+          grid-template-columns: 1fr auto;
+        }
+        @media (max-width: 768px) {
+          .hero-grid {
+            grid-template-columns: 1fr;
+          }
+          .hero-card-wrap {
+            display: none;
+          }
+        }
+      `}</style>
     </section>
   );
 }

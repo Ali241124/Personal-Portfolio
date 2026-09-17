@@ -1,72 +1,66 @@
 import { motion } from "framer-motion";
 
-const footerLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Contact", href: "#contact" },
+const navLinks = [
+  { label: "Home",         href: "#home" },
+  { label: "About",        href: "#about" },
+  { label: "Skills",       href: "#skills" },
+  { label: "Projects",     href: "#projects" },
+  { label: "Achievements", href: "#achievements" },
+  { label: "Experience",   href: "#experience" },
+  { label: "Contact",      href: "#contact" },
 ];
 
 const socials = [
-  { label: "GitHub", href: "https://github.com/Ali241124", icon: "⌥" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/syedalihassan24", icon: "💼" },
-  { label: "Email", href: "mailto:syedali.hassan2040@gmail.com", icon: "✉️" },
+  { label: "GitHub",   href: "https://github.com/Ali241124" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/syedalihassan24" },
+  { label: "Email",    href: "mailto:syedali.hassan2040@gmail.com" },
 ];
 
 export default function Footer() {
   const scrollTo = (href) => {
-    const id = href.slice(1);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <footer style={{
-      background: "var(--bg-primary)",
-      borderTop: "1px solid rgba(0,212,255,0.1)",
-      position: "relative"
+      background: "var(--surface-base)",
+      borderTop: "1px solid var(--border-subtle)",
     }}>
-      <div className="grid-bg" style={{ opacity: 0.3 }} />
-      <div style={{
-        maxWidth: "1200px", margin: "0 auto",
-        padding: "48px 24px 32px", position: "relative", zIndex: 1
-      }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "48px 24px 32px" }}>
 
-        <div style={{
-          display: "flex", justifyContent: "space-between",
-          alignItems: "center", flexWrap: "wrap", gap: "24px",
-          marginBottom: "36px"
-        }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 32, marginBottom: 40 }}>
+
           {/* Brand */}
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{
-              width: 34, height: 34, borderRadius: "8px",
-              background: "linear-gradient(135deg, #00d4ff, #7c3aed)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "14px", fontWeight: 700, fontFamily: "var(--font-mono)",
-              color: "white"
-            }}>
-              AI
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <div style={{
+                width: 30, height: 30, borderRadius: 7,
+                background: "var(--accent-glow)", border: "1px solid var(--accent-ring)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: "var(--accent)",
+              }}>
+                AH
+              </div>
+              <span style={{ fontWeight: 600, fontSize: 15, color: "var(--text-primary)" }}>Syed Ali Hassan</span>
             </div>
-            <span style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: "16px" }}>
-              Syed Ali Hassan
-            </span>
+            <p style={{ fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-mono)", lineHeight: 1.6 }}>
+              Software Engineer · AI & Full-Stack Developer
+            </p>
           </div>
 
-          {/* Nav links */}
-          <nav style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
-            {footerLinks.map((link) => (
+          {/* Nav */}
+          <nav aria-label="Footer navigation" style={{ display: "flex", flexWrap: "wrap", gap: "4px 2px" }}>
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
                 style={{
-                  padding: "6px 12px", borderRadius: "6px",
-                  fontSize: "13px", color: "var(--text-secondary)",
-                  textDecoration: "none", transition: "color 0.2s"
+                  padding: "5px 10px", borderRadius: 5, fontSize: 12,
+                  color: "var(--text-muted)", textDecoration: "none", transition: "color 0.2s",
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "var(--accent-blue)"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-secondary)"}
+                onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)"; }}
               >
                 {link.label}
               </a>
@@ -74,55 +68,51 @@ export default function Footer() {
           </nav>
 
           {/* Socials */}
-          <div style={{ display: "flex", gap: "10px" }}>
-            {socials.map(({ label, href, icon }) => (
+          <div style={{ display: "flex", gap: 8 }}>
+            {socials.map(({ label, href }) => (
               <motion.a
                 key={label}
                 href={href}
-                target="_blank" rel="noreferrer"
-                whileHover={{ scale: 1.15, borderColor: "var(--accent-blue)" }}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ y: -2 }}
                 title={label}
                 style={{
-                  width: 36, height: 36, borderRadius: "8px",
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "17px", textDecoration: "none", transition: "border-color 0.2s"
+                  padding: "6px 14px", borderRadius: 7,
+                  background: "var(--surface-card)", border: "1px solid var(--border)",
+                  fontSize: 12, color: "var(--text-muted)", textDecoration: "none",
+                  transition: "color 0.2s, border-color 0.2s",
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = "var(--accent)"; e.currentTarget.style.borderColor = "var(--accent-dim)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)"; e.currentTarget.style.borderColor = "var(--border)"; }}
               >
-                {icon}
+                {label}
               </motion.a>
             ))}
           </div>
         </div>
 
-        {/* Divider */}
-        <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", marginBottom: "24px" }} />
-
-        {/* Bottom */}
-        <div style={{
-          display: "flex", justifyContent: "space-between",
-          alignItems: "center", flexWrap: "wrap", gap: "12px"
-        }}>
-          <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-            © {new Date().getFullYear()} Syed Ali Hassan. Built with React & ❤️
+        <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: 24, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+          <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+            © {new Date().getFullYear()} Syed Ali Hassan. Built with React & Framer Motion.
           </p>
           <motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            whileHover={{ scale: 1.08, borderColor: "var(--accent-blue)" }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
             style={{
-              padding: "8px 16px", borderRadius: "8px",
-              background: "rgba(0,212,255,0.08)",
-              border: "1px solid rgba(0,212,255,0.2)",
-              color: "var(--accent-blue)", fontSize: "13px", fontWeight: 500,
-              cursor: "pointer", display: "flex", alignItems: "center", gap: "6px",
-              transition: "all 0.2s"
+              padding: "6px 14px", borderRadius: 7, cursor: "pointer",
+              background: "var(--surface-card)", border: "1px solid var(--border)",
+              color: "var(--text-muted)", fontSize: 12, fontFamily: "var(--font-mono)",
+              transition: "color 0.2s",
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--text-primary)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)"; }}
           >
-            ↑ Back to Top
+            ↑ Back to top
           </motion.button>
         </div>
+
       </div>
     </footer>
   );

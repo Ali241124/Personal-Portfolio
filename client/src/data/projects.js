@@ -9,6 +9,7 @@ const projects = [
     color: "#00d4ff",
     github: "https://mnist-digit-classifier-two.vercel.app/",
     demo: null,
+    image: "https://via.placeholder.com/800x600/0f172a/00d4ff?text=MNIST+Digit+Classifier",
     featured: true,
   },
   {
@@ -20,6 +21,7 @@ const projects = [
     color: "#7c3aed",
     github: "https://github.com/Ali241124/SentimentAI",
     demo: null,
+    image: "https://via.placeholder.com/800x600/0f172a/7c3aed?text=Sentiment+AI",
     featured: true,
   },
   {
@@ -31,6 +33,7 @@ const projects = [
     color: "#10b981",
     github: "https://github.com/Ali241124/VisionDetect-AI",
     demo: null,
+    image: "https://via.placeholder.com/800x600/0f172a/10b981?text=VisionDetect+AI",
     featured: true,
   },
   {
@@ -42,6 +45,7 @@ const projects = [
     color: "#f59e0b",
     github: "https://github.com/",
     demo: null,
+    image: "https://via.placeholder.com/800x600/0f172a/f59e0b?text=AI+Chatbot",
     featured: false,
   },
   {
@@ -53,6 +57,7 @@ const projects = [
     color: "#7c3aed",
     github: "https://github.com/",
     demo: null,
+    image: "https://via.placeholder.com/800x600/0f172a/7c3aed?text=Auto+Avenue",
     featured: false,
   },
   {
@@ -64,6 +69,7 @@ const projects = [
     color: "#06b6d4",
     github: "https://github.com/",
     demo: null,
+    image: "https://via.placeholder.com/800x600/0f172a/06b6d4?text=AI+Portfolio",
     featured: false,
   },
 ];

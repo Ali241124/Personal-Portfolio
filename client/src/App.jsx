@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { motion, useScroll, useSpring } from "framer-motion";
 import './index.css'
@@ -24,26 +25,42 @@ function ScrollProgress() {
 
   return (
     <motion.div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: "4px",
-        background: "var(--gradient-primary)",
-        transformOrigin: "0%",
-        zIndex: 1001,
-        scaleX
-      }}
+      className="scroll-progress"
+      style={{ scaleX }}
+    />
+  );
+}
+
+// Subtle cursor spotlight effect
+function CursorSpotlight() {
+  const [pos, setPos] = useState({ x: -999, y: -999 });
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const move = (e) => { setPos({ x: e.clientX, y: e.clientY }); setVisible(true); };
+    const leave = () => setVisible(false);
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseleave", leave);
+    return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mouseleave", leave); };
+  }, []);
+
+  return (
+    <div
+      className="cursor-spotlight"
+      style={{ left: pos.x, top: pos.y, opacity: visible ? 1 : 0 }}
+      aria-hidden="true"
     />
   );
 }
 
 function HomePage() {
+  const [aiEnabled, setAiEnabled] = useState(false);
+
   return (
-    <div style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', overflowX: 'hidden' }}>
+    <div style={{ background: "var(--surface-base)", color: "var(--text-primary)", minHeight: "100vh", overflowX: "hidden" }}>
+      <CursorSpotlight />
       <ScrollProgress />
-      <Navbar />
+      <Navbar aiEnabled={aiEnabled} setAiEnabled={setAiEnabled} />
       <main>
         <Hero />
         <About />
@@ -53,7 +70,7 @@ function HomePage() {
         <Experience />
         <Contact />
       </main>
-      <SyedAI />
+      {aiEnabled && <SyedAI onClose={() => setAiEnabled(false)} />}
       <Footer />
     </div>
   );
