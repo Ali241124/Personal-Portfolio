@@ -3,78 +3,147 @@ import { motion, useInView } from "framer-motion";
 import { Link } from "react-router-dom";
 import achievements from "../data/achievements";
 
-const featured = achievements.filter((a) => a.featured);
+const featuredAchievements = achievements.filter((a) => a.featured);
 
 export default function Achievements() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="achievements" ref={ref} className="py-24 bg-white dark:bg-primary-900 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
+    <section
+      id="achievements"
+      ref={ref}
+      style={{
+        background: "var(--surface-raised)",
+        position: "relative",
+        borderTop: "1px solid var(--border-subtle)",
+      }}
+    >
+      <div className="section-wrapper">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.55 }}
+          style={{ marginBottom: 48 }}
         >
-          <span className="inline-block py-1.5 px-4 rounded-full bg-accent-teal/10 text-accent-teal text-sm font-semibold tracking-wide mb-4">
-            🏆 Certifications
-          </span>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
-            Key <span className="text-accent-teal">Achievements</span>
-          </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Certifications and courses that have shaped my technical foundation.
+          <span className="section-label">Certifications & Accreditations</span>
+          <h2 className="section-title">Verified Credentials</h2>
+          <p className="section-sub">
+            Formal specializations validating competencies across cloud architecture, neural networks, and modern software design.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featured.map((item, i) => (
+        {/* Responsive grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 340px), 1fr))",
+            gap: 24,
+          }}
+        >
+          {featuredAchievements.map((item, i) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group bg-gray-50 dark:bg-primary-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-primary-700 relative overflow-hidden flex flex-col h-full"
+              transition={{ duration: 0.45, delay: i * 0.08 }}
+              style={{
+                background: "var(--surface-card)",
+                border: "1px solid var(--border)",
+                borderRadius: 14,
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                transition: "all 0.25s ease",
+              }}
+              className="achievement-card-item"
             >
-              {/* Image Section */}
-              <div className="h-48 w-full relative overflow-hidden bg-gray-200 dark:bg-primary-900">
-                {item.image && (
-                  <img 
-                    src={item.image} 
-                    alt={item.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                )}
-                {/* Color accent top bar overlay */}
-                <div 
-                  className="absolute top-0 left-0 right-0 h-1 z-10" 
-                  style={{ background: item.color || '#0d9488' }} 
-                />
-              </div>
+              {/* Accent top stripe */}
+              <div
+                style={{
+                  height: 3,
+                  width: "100%",
+                  background: item.color || "var(--accent)",
+                }}
+              />
 
-              <div className="p-6 flex flex-col flex-grow">
-                {/* Header */}
-                <div className="flex flex-col gap-2 mb-4">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white leading-tight">
-                    {item.title}
-                  </h3>
-                  <div className="flex justify-between items-center">
-                    <span 
-                      className="text-sm font-semibold font-mono"
-                      style={{ color: item.color || '#0d9488' }}
-                    >
-                      {item.issuer}
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-                      {item.date}
-                    </span>
-                  </div>
+              <div
+                style={{
+                  padding: "24px 22px 20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  flexGrow: 1,
+                }}
+              >
+                {/* Meta details */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: 14,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 11,
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      color: item.color || "var(--accent)",
+                      background: "rgba(255,255,255,0.03)",
+                      padding: "3px 8px",
+                      borderRadius: 4,
+                      border: "1px solid var(--border)",
+                    }}
+                  >
+                    {item.badge || "Verified Credential"}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: 12,
+                      fontFamily: "var(--font-mono)",
+                      color: "var(--text-muted)",
+                    }}
+                  >
+                    {item.date}
+                  </span>
                 </div>
 
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed flex-grow">
+                {/* Title */}
+                <h3
+                  style={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: "var(--text-primary)",
+                    lineHeight: 1.35,
+                    marginBottom: 6,
+                  }}
+                >
+                  {item.title}
+                </h3>
+
+                {/* Issuer */}
+                <div
+                  style={{
+                    fontSize: 13,
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--accent)",
+                    marginBottom: 14,
+                  }}
+                >
+                  {item.issuer}
+                </div>
+
+                {/* Description */}
+                <p
+                  style={{
+                    fontSize: 14,
+                    color: "var(--text-secondary)",
+                    lineHeight: 1.65,
+                    flexGrow: 1,
+                  }}
+                >
                   {item.desc}
                 </p>
               </div>
@@ -82,32 +151,35 @@ export default function Achievements() {
           ))}
         </div>
 
-        {/* View All Achievements button */}
+        {/* View All Achievements Button */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-center mt-16"
+          transition={{ duration: 0.5, delay: 0.3 }}
+          style={{
+            marginTop: 48,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 12,
+          }}
         >
-          <p className="text-gray-500 text-sm font-mono mb-6">
-            Showing {featured.length} of {achievements.length} achievements
-          </p>
-
-          <Link to="/achievements">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gray-50 dark:bg-primary-800 border border-gray-200 dark:border-primary-700 text-primary-900 dark:text-white font-medium hover:border-accent-teal hover:text-accent-teal transition-colors shadow-sm group"
-            >
-              View All Achievements
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white dark:bg-primary-900 group-hover:bg-accent-teal/10">
-                →
-              </span>
-            </motion.button>
+          <span style={{ fontSize: 13, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
+            Showing {featuredAchievements.length} of {achievements.length} accreditations
+          </span>
+          <Link to="/achievements" className="btn-secondary" style={{ padding: "10px 24px" }}>
+            View Full Credentials Archive →
           </Link>
         </motion.div>
-
       </div>
+
+      <style>{`
+        .achievement-card-item:hover {
+          border-color: var(--border-strong) !important;
+          transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+      `}</style>
     </section>
   );
 }

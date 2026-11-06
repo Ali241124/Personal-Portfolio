@@ -5,8 +5,9 @@ import projects from "../data/projects";
 
 const FILTERS = [
   { key: "all", label: "All Projects" },
-  { key: "ai-ml", label: "AI / ML" },
-  { key: "web", label: "Web" },
+  { key: "agentic-ai", label: "Agentic AI" },
+  { key: "ai-ml", label: "AI & ML" },
+  { key: "web", label: "Web Platform" },
 ];
 
 export default function AllProjects() {
@@ -17,180 +18,310 @@ export default function AllProjects() {
 
   const filtered = projects.filter((p) => {
     const matchesFilter = filter === "all" || p.category === filter;
-    const matchesSearch = 
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchesSearch =
+      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+      p.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesFilter && matchesSearch;
   });
 
   return (
-    <div className="bg-gray-50 dark:bg-primary-900 text-gray-900 dark:text-white min-h-screen overflow-x-hidden">
-      {/* ── Top nav bar ── */}
-      <nav className="sticky top-0 z-50 flex items-center gap-4 px-6 md:px-10 py-4 bg-white/80 dark:bg-primary-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-primary-800">
-        <Link to="/" id="back-to-home-link">
-          <motion.button
-            id="back-to-home-btn"
-            whileHover={{ x: -4, scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent-teal/10 border border-accent-teal/20 rounded-full text-accent-teal font-medium text-sm transition-colors hover:bg-accent-teal/20"
+    <div
+      style={{
+        background: "var(--surface-base)",
+        color: "var(--text-primary)",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* Top Navbar */}
+      <nav
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          background: "rgba(8,11,16,0.92)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "1px solid var(--border)",
+          padding: "16px 24px",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1200,
+            margin: "0 auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 12,
+          }}
+        >
+          <Link
+            to="/"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "7px 16px",
+              background: "var(--surface-raised)",
+              border: "1px solid var(--border)",
+              borderRadius: 8,
+              color: "var(--text-primary)",
+              fontSize: 13,
+              fontWeight: 500,
+              textDecoration: "none",
+              transition: "all 0.2s ease",
+            }}
+            className="back-btn-hover"
           >
             ← Back to Home
-          </motion.button>
-        </Link>
-        <span className="font-serif text-lg font-bold text-gray-900 dark:text-white ml-2">
-          All Projects
-        </span>
+          </Link>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 13,
+              color: "var(--text-secondary)",
+            }}
+          >
+            Syed Ali Hassan · Project Archive
+          </span>
+        </div>
       </nav>
 
-      {/* ── Main content ── */}
-      <section ref={ref} className="relative overflow-hidden py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto relative z-10">
-
+      {/* Main Container */}
+      <main ref={ref} style={{ flexGrow: 1, padding: "clamp(32px, 5vw, 64px) 24px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            transition={{ duration: 0.5 }}
+            style={{ marginBottom: 40 }}
           >
-            <span className="inline-block py-1.5 px-4 rounded-full bg-accent-teal/10 text-accent-teal text-sm font-semibold tracking-wide mb-4">
-              📂 Portfolio
-            </span>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
-              All <span className="text-accent-teal">Projects</span>
-            </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10">
-              Every project I've built — from AI/ML experiments to full-stack web apps.
+            <span className="section-label">Engineering Index</span>
+            <h1 className="section-title">All Built Projects</h1>
+            <p className="section-sub">
+              Full archive of autonomous agent architectures, fine-tuned transformer experiments, and software systems.
             </p>
-
-            {/* Filters and Search Container */}
-            <div className="flex flex-col md:flex-row gap-6 justify-between items-center max-w-4xl mx-auto mb-10">
-              {/* Filter tabs */}
-              <div className="flex gap-2 flex-wrap justify-center">
-                {FILTERS.map(({ key, label }) => (
-                  <motion.button
-                    key={key}
-                    id={`filter-${key}`}
-                    onClick={() => setFilter(key)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.97 }}
-                    className={`px-5 py-2 rounded-full border text-sm font-medium transition-all ${
-                      filter === key 
-                        ? 'border-accent-teal bg-accent-teal/10 text-accent-teal' 
-                        : 'border-gray-200 dark:border-primary-700 bg-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-primary-600'
-                    }`}
-                  >
-                    {label}
-                    <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                      filter === key ? 'bg-accent-teal/20' : 'bg-gray-100 dark:bg-primary-800'
-                    }`}>
-                      {key === "all" ? projects.length : projects.filter(p => p.category === key).length}
-                    </span>
-                  </motion.button>
-                ))}
-              </div>
-
-              {/* Search Bar */}
-              <div className="relative w-full md:w-72">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search projects..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-primary-700 bg-white dark:bg-primary-800 text-sm focus:outline-none focus:ring-2 focus:ring-accent-teal/50 transition-shadow text-gray-900 dark:text-white"
-                />
-              </div>
-            </div>
           </motion.div>
 
-          {/* Cards grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Filters & Search Control Bar */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 16,
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 36,
+            }}
+          >
+            {/* Filter Tabs */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {FILTERS.map(({ key, label }) => {
+                const count = key === "all" ? projects.length : projects.filter((p) => p.category === key).length;
+                const isActive = filter === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setFilter(key)}
+                    style={{
+                      padding: "7px 14px",
+                      borderRadius: 8,
+                      border: `1px solid ${isActive ? "var(--accent)" : "var(--border)"}`,
+                      background: isActive ? "var(--accent-glow)" : "var(--surface-card)",
+                      color: isActive ? "var(--accent)" : "var(--text-secondary)",
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 12,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    <span>{label}</span>
+                    <span
+                      style={{
+                        padding: "1px 6px",
+                        borderRadius: 10,
+                        background: isActive ? "rgba(45,212,191,0.2)" : "var(--surface-raised)",
+                        fontSize: 10,
+                      }}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Search Input */}
+            <div style={{ position: "relative", minWidth: 260, flexGrow: 1, maxWidth: 360 }}>
+              <input
+                type="text"
+                placeholder="Search by tech, keyword or name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "9px 14px",
+                  background: "var(--surface-card)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 8,
+                  color: "var(--text-primary)",
+                  fontSize: 13,
+                  outline: "none",
+                  fontFamily: "var(--font-sans)",
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Projects Grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 340px), 1fr))",
+              gap: 24,
+            }}
+          >
             <AnimatePresence mode="popLayout">
               {filtered.map((project, i) => (
                 <motion.div
                   key={project.title}
                   layout
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4, delay: i * 0.05 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="group bg-white dark:bg-primary-900 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-primary-700 relative overflow-hidden flex flex-col h-full"
+                  transition={{ duration: 0.35, delay: i * 0.04 }}
+                  style={{
+                    background: "var(--surface-card)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 14,
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                  className="project-card-item"
                 >
-                  {/* Featured badge */}
-                  {project.featured && (
-                    <div className="absolute top-4 right-4 z-20 px-2.5 py-1 bg-accent-teal/90 text-white rounded-full text-xs font-semibold shadow-md">
-                      ⭐ Featured
-                    </div>
-                  )}
+                  <div
+                    style={{
+                      height: 3,
+                      width: "100%",
+                      background: project.color || "var(--accent)",
+                    }}
+                  />
 
-                  {/* Image Section */}
-                  <div className="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-primary-800">
-                    {project.image ? (
-                      <img 
-                        src={project.image} 
-                        alt={project.title} 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl">
-                        {project.emoji}
-                      </div>
-                    )}
-                    {/* Color accent top bar overlay */}
-                    <div 
-                      className="absolute top-0 left-0 right-0 h-1 z-10" 
-                      style={{ background: project.color || '#0d9488' }} 
-                    />
-                  </div>
-
-                  <div className="p-6 flex flex-col flex-grow">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div 
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-                          style={{ backgroundColor: `${project.color || '#0d9488'}15` }}
-                        >
-                          {project.emoji}
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-white leading-tight pr-2">
-                          {project.title}
-                        </h3>
-                      </div>
-                      <a 
-                        href={project.github} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-primary-800 flex items-center justify-center text-gray-500 hover:text-accent-teal hover:bg-accent-teal/10 transition-colors shrink-0"
+                  <div
+                    style={{
+                      padding: "24px 22px 20px",
+                      display: "flex",
+                      flexDirection: "column",
+                      flexGrow: 1,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginBottom: 14,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 11,
+                          letterSpacing: "0.06em",
+                          textTransform: "uppercase",
+                          color: project.color || "var(--accent)",
+                          background: "rgba(255,255,255,0.03)",
+                          padding: "3px 8px",
+                          borderRadius: 4,
+                          border: "1px solid var(--border)",
+                        }}
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </a>
+                        {project.badge || project.category}
+                      </span>
+
+                      <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                        {project.demo && (
+                          <a
+                            href={project.demo}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              fontSize: 12,
+                              color: "var(--accent)",
+                              textDecoration: "none",
+                              fontFamily: "var(--font-mono)",
+                            }}
+                          >
+                            Live ↗
+                          </a>
+                        )}
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label="GitHub Repository"
+                          style={{
+                            color: "var(--text-secondary)",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                              fillRule="evenodd"
+                              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </a>
+                      </div>
                     </div>
 
-                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6 flex-grow">
+                    <h3
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 700,
+                        color: "var(--text-primary)",
+                        lineHeight: 1.35,
+                        marginBottom: 10,
+                      }}
+                    >
+                      {project.title}
+                    </h3>
+
+                    <p
+                      style={{
+                        fontSize: 14,
+                        color: "var(--text-secondary)",
+                        lineHeight: 1.65,
+                        marginBottom: 20,
+                        flexGrow: 1,
+                      }}
+                    >
                       {project.desc}
                     </p>
 
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mt-auto">
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: "auto" }}>
                       {project.tags.map((tag) => (
-                        <span 
-                          key={tag} 
-                          className="px-2.5 py-1 rounded-md text-xs font-mono font-medium"
-                          style={{ 
-                            backgroundColor: `${project.color || '#0d9488'}10`,
-                            color: project.color || '#0d9488',
-                            borderColor: `${project.color || '#0d9488'}30`,
-                            borderWidth: '1px'
+                        <span
+                          key={tag}
+                          style={{
+                            fontSize: 11,
+                            padding: "3px 8px",
+                            background: "var(--surface-raised)",
+                            border: "1px solid var(--border)",
+                            borderRadius: 5,
+                            color: "var(--text-muted)",
+                            fontFamily: "var(--font-mono)",
                           }}
                         >
                           {tag}
@@ -203,20 +334,32 @@ export default function AllProjects() {
             </AnimatePresence>
           </div>
 
-          {/* Empty state */}
           {filtered.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20 text-gray-500 dark:text-gray-400"
+            <div
+              style={{
+                textAlign: "center",
+                padding: "64px 20px",
+                color: "var(--text-muted)",
+                fontFamily: "var(--font-mono)",
+              }}
             >
-              <div className="text-5xl mb-4">🔍</div>
-              <p className="font-mono">No projects found matching your criteria.</p>
-            </motion.div>
+              No matching projects found for "{searchQuery}".
+            </div>
           )}
-
         </div>
-      </section>
+      </main>
+
+      <style>{`
+        .back-btn-hover:hover {
+          border-color: var(--accent) !important;
+          color: var(--accent) !important;
+        }
+        .project-card-item:hover {
+          border-color: var(--border-strong) !important;
+          transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+      `}</style>
     </div>
   );
 }

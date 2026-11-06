@@ -358,10 +358,35 @@ code, pre {
   will-change: left, top;
 }
 
+/* ── Responsive helpers & clean resets ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 48px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
 @media (max-width: 768px) {
+  .section-wrapper {
+    padding: 64px 20px;
+  }
   .cursor-spotlight { display: none; }
   .bg-orb { opacity: 0.03; }
   .bg-grid { opacity: 0.25; }
 }
+
+@media (max-width: 480px) {
+  .section-wrapper {
+    padding: 48px 16px;
+  }
+}
+
 
 

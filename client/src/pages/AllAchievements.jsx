@@ -10,133 +10,226 @@ export default function AllAchievements() {
 
   const filtered = achievements.filter((a) => {
     return (
-      a.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       a.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      a.issuer.toLowerCase().includes(searchQuery.toLowerCase())
+      a.issuer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (a.badge && a.badge.toLowerCase().includes(searchQuery.toLowerCase()))
     );
   });
 
   return (
-    <div className="bg-gray-50 dark:bg-primary-900 text-gray-900 dark:text-white min-h-screen overflow-x-hidden">
-      {/* ── Top nav bar ── */}
-      <nav className="sticky top-0 z-50 flex items-center gap-4 px-6 md:px-10 py-4 bg-white/80 dark:bg-primary-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-primary-800">
-        <Link to="/" id="back-to-home-link">
-          <motion.button
-            id="back-to-home-btn"
-            whileHover={{ x: -4, scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent-teal/10 border border-accent-teal/20 rounded-full text-accent-teal font-medium text-sm transition-colors hover:bg-accent-teal/20"
+    <div
+      style={{
+        background: "var(--surface-base)",
+        color: "var(--text-primary)",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* Top Navbar */}
+      <nav
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          background: "rgba(8,11,16,0.92)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "1px solid var(--border)",
+          padding: "16px 24px",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1200,
+            margin: "0 auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 12,
+          }}
+        >
+          <Link
+            to="/"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "7px 16px",
+              background: "var(--surface-raised)",
+              border: "1px solid var(--border)",
+              borderRadius: 8,
+              color: "var(--text-primary)",
+              fontSize: 13,
+              fontWeight: 500,
+              textDecoration: "none",
+              transition: "all 0.2s ease",
+            }}
+            className="back-btn-hover"
           >
             ← Back to Home
-          </motion.button>
-        </Link>
-        <span className="font-serif text-lg font-bold text-gray-900 dark:text-white ml-2">
-          All Achievements
-        </span>
+          </Link>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 13,
+              color: "var(--text-secondary)",
+            }}
+          >
+            Syed Ali Hassan · Certifications & Credentials
+          </span>
+        </div>
       </nav>
 
-      {/* ── Main content ── */}
-      <section ref={ref} className="relative overflow-hidden py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto relative z-10">
-
+      {/* Main Container */}
+      <main ref={ref} style={{ flexGrow: 1, padding: "clamp(32px, 5vw, 64px) 24px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            transition={{ duration: 0.5 }}
+            style={{ marginBottom: 40 }}
           >
-            <span className="inline-block py-1.5 px-4 rounded-full bg-accent-teal/10 text-accent-teal text-sm font-semibold tracking-wide mb-4">
-              🏆 Portfolio
-            </span>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
-              All <span className="text-accent-teal">Achievements</span>
-            </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10">
-              A complete list of my certifications and milestones.
+            <span className="section-label">Verified Record</span>
+            <h1 className="section-title">All Certifications & Credentials</h1>
+            <p className="section-sub">
+              Complete index of formal industry certifications, academic specializations, and professional qualifications.
             </p>
-
-            {/* Search Bar */}
-            <div className="flex justify-center max-w-lg mx-auto mb-10">
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search achievements by title, issuer, or description..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-primary-700 bg-white dark:bg-primary-800 text-sm focus:outline-none focus:ring-2 focus:ring-accent-teal/50 transition-shadow text-gray-900 dark:text-white"
-                />
-              </div>
-            </div>
           </motion.div>
 
-          {/* Cards grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Search bar */}
+          <div style={{ maxWidth: 440, marginBottom: 36 }}>
+            <input
+              type="text"
+              placeholder="Search credentials by title, issuer or domain..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px 14px",
+                background: "var(--surface-card)",
+                border: "1px solid var(--border)",
+                borderRadius: 8,
+                color: "var(--text-primary)",
+                fontSize: 13,
+                outline: "none",
+                fontFamily: "var(--font-sans)",
+              }}
+            />
+          </div>
+
+          {/* Grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 340px), 1fr))",
+              gap: 24,
+            }}
+          >
             <AnimatePresence mode="popLayout">
-              {filtered.map((achievement, i) => (
+              {filtered.map((item, i) => (
                 <motion.div
-                  key={achievement.id}
+                  key={item.id}
                   layout
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4, delay: i * 0.05 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="group bg-white dark:bg-primary-900 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-primary-700 relative overflow-hidden flex flex-col h-full"
+                  transition={{ duration: 0.35, delay: i * 0.04 }}
+                  style={{
+                    background: "var(--surface-card)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 14,
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                  className="achievement-card-item"
                 >
-                  {/* Featured badge */}
-                  {achievement.featured && (
-                    <div className="absolute top-4 right-4 z-20 px-2.5 py-1 bg-accent-teal/90 text-white rounded-full text-xs font-semibold shadow-md">
-                      ⭐ Featured
+                  <div
+                    style={{
+                      height: 3,
+                      width: "100%",
+                      background: item.color || "var(--accent)",
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      padding: "24px 22px 20px",
+                      display: "flex",
+                      flexDirection: "column",
+                      flexGrow: 1,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginBottom: 14,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 11,
+                          letterSpacing: "0.06em",
+                          textTransform: "uppercase",
+                          color: item.color || "var(--accent)",
+                          background: "rgba(255,255,255,0.03)",
+                          padding: "3px 8px",
+                          borderRadius: 4,
+                          border: "1px solid var(--border)",
+                        }}
+                      >
+                        {item.badge || "Verified"}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 12,
+                          fontFamily: "var(--font-mono)",
+                          color: "var(--text-muted)",
+                        }}
+                      >
+                        {item.date}
+                      </span>
                     </div>
-                  )}
 
-                  {/* Image Section */}
-                  <div className="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-primary-800">
-                    {achievement.image ? (
-                      <img 
-                        src={achievement.image} 
-                        alt={achievement.title} 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl">
-                        🏅
-                      </div>
-                    )}
-                    {/* Color accent top bar overlay */}
-                    <div 
-                      className="absolute top-0 left-0 right-0 h-1 z-10" 
-                      style={{ background: achievement.color || '#0d9488' }} 
-                    />
-                  </div>
+                    <h3
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 700,
+                        color: "var(--text-primary)",
+                        lineHeight: 1.35,
+                        marginBottom: 6,
+                      }}
+                    >
+                      {item.title}
+                    </h3>
 
-                  <div className="p-6 flex flex-col flex-grow">
-                    {/* Header */}
-                    <div className="flex flex-col gap-2 mb-4">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white leading-tight">
-                        {achievement.title}
-                      </h3>
-                      <div className="flex justify-between items-center">
-                        <span 
-                          className="text-sm font-semibold font-mono"
-                          style={{ color: achievement.color || '#0d9488' }}
-                        >
-                          {achievement.issuer}
-                        </span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-                          {achievement.date}
-                        </span>
-                      </div>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        fontFamily: "var(--font-mono)",
+                        color: "var(--accent)",
+                        marginBottom: 14,
+                      }}
+                    >
+                      {item.issuer}
                     </div>
 
-                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6 flex-grow">
-                      {achievement.desc}
+                    <p
+                      style={{
+                        fontSize: 14,
+                        color: "var(--text-secondary)",
+                        lineHeight: 1.65,
+                        flexGrow: 1,
+                      }}
+                    >
+                      {item.desc}
                     </p>
                   </div>
                 </motion.div>
@@ -144,20 +237,32 @@ export default function AllAchievements() {
             </AnimatePresence>
           </div>
 
-          {/* Empty state */}
           {filtered.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20 text-gray-500 dark:text-gray-400"
+            <div
+              style={{
+                textAlign: "center",
+                padding: "64px 20px",
+                color: "var(--text-muted)",
+                fontFamily: "var(--font-mono)",
+              }}
             >
-              <div className="text-5xl mb-4">🔍</div>
-              <p className="font-mono">No achievements found matching your criteria.</p>
-            </motion.div>
+              No matching credentials found for "{searchQuery}".
+            </div>
           )}
-
         </div>
-      </section>
+      </main>
+
+      <style>{`
+        .back-btn-hover:hover {
+          border-color: var(--accent) !important;
+          color: var(--accent) !important;
+        }
+        .achievement-card-item:hover {
+          border-color: var(--border-strong) !important;
+          transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        }
+      `}</style>
     </div>
   );
 }
