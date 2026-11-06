@@ -21,6 +21,10 @@
       "destination": "/api/index.js"
     },
     {
+      "source": "/api/contact",
+      "destination": "/api/index.js"
+    },
+    {
       "source": "/(.*)",
       "destination": "/client/$1"
     }

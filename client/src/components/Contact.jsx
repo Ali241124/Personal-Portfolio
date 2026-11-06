@@ -46,11 +46,19 @@ export default function Contact() {
     setStatus(null);
 
     try {
-      await axios.post("/api/contact", form);
+      // Support both /contact and /api/contact routes
+      await axios.post("/contact", form);
       setStatus({ type: "success", text: "Message transmitted successfully! I will get back to you shortly." });
       setForm({ name: "", email: "", subject: "", message: "" });
-    } catch {
-      setStatus({ type: "error", text: "Direct send failed. Please reach me directly at syedali.hassan2040@gmail.com" });
+    } catch (err) {
+      console.error("Submission error:", err);
+      const serverMsg = err.response?.data?.details || err.response?.data?.error;
+      setStatus({ 
+        type: "error", 
+        text: serverMsg 
+          ? `Direct send failed (${serverMsg}). Please email directly at syedali.hassan2040@gmail.com`
+          : "Direct send failed. Please reach me directly at syedali.hassan2040@gmail.com" 
+      });
     } finally {
       setLoading(false);
     }

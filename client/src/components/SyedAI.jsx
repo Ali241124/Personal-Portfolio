@@ -5,7 +5,10 @@ import axios from "axios";
 export default function SyedAI({ onClose }) {
   const [isListening, setIsListening] = useState(false);
   const [messages, setMessages] = useState([
-    { role: "bot", content: "Hi! I'm Syed's AI Assistant. How can I help you today?" }
+    {
+      role: "bot",
+      content: "Hello! I am Syed Ali Hassan's AI Assistant. Ask me about his projects, agentic workflows, machine learning models, or background.",
+    },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,14 +23,16 @@ export default function SyedAI({ onClose }) {
     };
     window.speechSynthesis.onvoiceschanged = loadVoices;
     loadVoices();
-    return () => { window.speechSynthesis.onvoiceschanged = null; };
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
   }, []);
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition && !recognitionRef.current) {
       recognitionRef.current = new SpeechRecognition();
-      
+
       recognitionRef.current.onstart = () => setIsListening(true);
       recognitionRef.current.onend = () => setIsListening(false);
       recognitionRef.current.onresult = (event) => {
@@ -47,17 +52,20 @@ export default function SyedAI({ onClose }) {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 1.0;
-    utterance.pitch = 0.9;
-    
-    const maleVoice = voices.find(v => 
-      (v.name.toLowerCase().includes("male") || 
-       v.name.toLowerCase().includes("david") || 
-       v.name.toLowerCase().includes("james") ||
-       v.name.toLowerCase().includes("mark")) && 
-      v.lang.startsWith("en")
-    ) || voices.find(v => v.lang.startsWith("en"));
-                     
-    if (maleVoice) utterance.voice = maleVoice;
+    utterance.pitch = 0.95;
+
+    const naturalVoice =
+      voices.find(
+        (v) =>
+          (v.name.toLowerCase().includes("natural") ||
+            v.name.toLowerCase().includes("male") ||
+            v.name.toLowerCase().includes("david") ||
+            v.name.toLowerCase().includes("james") ||
+            v.name.toLowerCase().includes("mark")) &&
+          v.lang.startsWith("en")
+      ) || voices.find((v) => v.lang.startsWith("en"));
+
+    if (naturalVoice) utterance.voice = naturalVoice;
     window.speechSynthesis.speak(utterance);
   };
 
@@ -73,14 +81,21 @@ export default function SyedAI({ onClose }) {
     try {
       const response = await axios.post("/jarvis", {
         message: userText,
-        history: messages
+        history: messages,
       });
-      
+
       const botResponse = response.data.response;
       setMessages([...newMessages, { role: "bot", content: botResponse }]);
       speak(botResponse);
-    } catch (error) {
-      setMessages([...newMessages, { role: "bot", content: "Sorry, I'm currently unavailable. Please try again later." }]);
+    } catch {
+      setMessages([
+        ...newMessages,
+        {
+          role: "bot",
+          content:
+            "I could not reach the inference backend right now. Feel free to explore the projects section or message Syed directly at syedali.hassan2040@gmail.com!",
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -92,7 +107,7 @@ export default function SyedAI({ onClose }) {
       recognitionRef.current?.stop();
     } else {
       if (!recognitionRef.current) {
-        alert("Speech recognition not supported in this browser.");
+        alert("Speech recognition is not supported in this browser.");
         return;
       }
       recognitionRef.current.start();
@@ -102,82 +117,178 @@ export default function SyedAI({ onClose }) {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed bottom-6 right-6 w-[380px] max-w-[calc(100vw-48px)] h-[500px] z-[999] flex flex-col bg-white dark:bg-primary-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-primary-800 overflow-hidden"
+        className="fixed bottom-6 right-6 w-[380px] max-w-[calc(100vw-36px)] h-[520px] z-[999] flex flex-col rounded-2xl shadow-2xl overflow-hidden"
+        style={{
+          background: "var(--surface-raised)",
+          border: "1px solid var(--border-strong)",
+          boxShadow: "0 24px 60px rgba(0, 0, 0, 0.6)",
+        }}
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
       >
         {/* Header */}
-        <div className="px-5 py-4 border-b border-gray-100 dark:border-primary-800 flex justify-between items-center bg-gray-50 dark:bg-primary-900/50">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-accent-teal/10 flex items-center justify-center text-accent-teal">
-              🤖
-            </div>
-            <span className="font-semibold text-gray-900 dark:text-white">
-              Syed AI
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={toggleListening} 
-              className={`p-2 rounded-full transition-colors ${
-                isListening 
-                  ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' 
-                  : 'hover:bg-gray-200 dark:hover:bg-primary-800 text-gray-500'
-              }`}
-              title={isListening ? "Stop listening" : "Start voice input"}
+        <div
+          style={{
+            padding: "14px 18px",
+            borderBottom: "1px solid var(--border)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            background: "rgba(9, 13, 22, 0.95)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: 8,
+                background: "var(--accent-glow)",
+                border: "1px solid var(--accent-ring)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: "var(--font-mono)",
+                fontSize: 12,
+                fontWeight: 700,
+                color: "var(--accent-secondary)",
+              }}
             >
-              {isListening ? "🛑" : "🎙️"}
+              AI
+            </div>
+            <div>
+              <span style={{ fontWeight: 700, fontSize: 14, color: "var(--text-primary)", display: "block" }}>
+                Syed AI Assistant
+              </span>
+              <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--accent-secondary)" }}>
+                Online & Ready
+              </span>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <button
+              onClick={toggleListening}
+              style={{
+                background: isListening ? "rgba(239, 68, 68, 0.2)" : "rgba(255, 255, 255, 0.05)",
+                border: `1px solid ${isListening ? "#ef4444" : "var(--border)"}`,
+                borderRadius: 6,
+                padding: "6px 8px",
+                color: isListening ? "#ef4444" : "var(--text-secondary)",
+                cursor: "pointer",
+                fontSize: 12,
+              }}
+              title={isListening ? "Stop voice listening" : "Start voice listening"}
+            >
+              {isListening ? "Listening..." : "🎙️"}
             </button>
-            <button 
-              onClick={() => { window.speechSynthesis.cancel(); onClose?.(); }} 
-              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-primary-800 text-gray-500 transition-colors"
+            <button
+              onClick={() => {
+                window.speechSynthesis.cancel();
+                onClose?.();
+              }}
+              style={{
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid var(--border)",
+                borderRadius: 6,
+                padding: "6px 8px",
+                color: "var(--text-muted)",
+                cursor: "pointer",
+              }}
               title="Close Assistant"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
         </div>
 
-        {/* Chat Area */}
-        <div className="flex-1 p-5 overflow-y-auto flex flex-col gap-4 bg-white dark:bg-primary-900" ref={scrollRef}>
+        {/* Chat Stream */}
+        <div
+          ref={scrollRef}
+          style={{
+            flex: 1,
+            padding: 16,
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+            background: "var(--surface-base)",
+          }}
+        >
           {messages.map((m, i) => (
-            <div 
-              key={i} 
-              className={`max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed ${
-                m.role === 'user' 
-                  ? 'self-end bg-accent-teal text-white rounded-br-sm' 
-                  : 'self-start bg-gray-100 dark:bg-primary-800 text-gray-800 dark:text-gray-200 rounded-bl-sm'
-              }`}
+            <div
+              key={i}
+              style={{
+                maxWidth: "85%",
+                padding: "10px 14px",
+                borderRadius: 12,
+                fontSize: 13.5,
+                lineHeight: 1.55,
+                alignSelf: m.role === "user" ? "flex-end" : "flex-start",
+                background:
+                  m.role === "user"
+                    ? "var(--accent-gradient)"
+                    : "var(--surface-card)",
+                border: m.role === "user" ? "none" : "1px solid var(--border)",
+                color: "#FFFFFF",
+              }}
             >
               {m.content}
             </div>
           ))}
           {loading && (
-            <div className="self-start bg-gray-100 dark:bg-primary-800 text-gray-500 p-3.5 rounded-2xl rounded-bl-sm text-sm flex gap-1">
-              <span className="animate-bounce">●</span>
-              <span className="animate-bounce" style={{ animationDelay: '0.2s' }}>●</span>
-              <span className="animate-bounce" style={{ animationDelay: '0.4s' }}>●</span>
+            <div
+              style={{
+                alignSelf: "flex-start",
+                padding: "8px 14px",
+                borderRadius: 12,
+                background: "var(--surface-card)",
+                border: "1px solid var(--border)",
+                fontSize: 12,
+                color: "var(--accent-secondary)",
+                fontFamily: "var(--font-mono)",
+              }}
+            >
+              Thinking...
             </div>
           )}
         </div>
 
-        {/* Input Area */}
-        <form 
-          className="p-4 border-t border-gray-100 dark:border-primary-800 flex gap-2 bg-gray-50 dark:bg-primary-900/50" 
-          onSubmit={(e) => { e.preventDefault(); handleSend(); }}
+        {/* Input */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSend();
+          }}
+          style={{
+            padding: 12,
+            borderTop: "1px solid var(--border)",
+            background: "rgba(9, 13, 22, 0.95)",
+            display: "flex",
+            gap: 8,
+          }}
         >
-          <input 
-            className="flex-1 bg-white dark:bg-primary-800 border border-gray-200 dark:border-primary-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent-teal dark:focus:border-accent-teal text-gray-900 dark:text-white"
-            placeholder="Ask me anything..." 
+          <input
+            style={{
+              flex: 1,
+              background: "var(--surface-card)",
+              border: "1px solid var(--border)",
+              borderRadius: 8,
+              padding: "9px 12px",
+              color: "var(--text-primary)",
+              fontSize: 13,
+              outline: "none",
+            }}
+            placeholder="Ask about Syed's projects or skills..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <button 
-            type="submit" 
-            className="bg-accent-teal text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-teal-600 transition-colors shadow-sm disabled:opacity-50"
+          <button
+            type="submit"
+            className="btn-primary"
+            style={{ padding: "8px 16px", fontSize: 13 }}
             disabled={!input.trim()}
           >
             Send
