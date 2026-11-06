@@ -3,13 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 
 const navLinks = [
-  { label: "Home",         href: "#home" },
-  { label: "About",        href: "#about" },
-  { label: "Skills",       href: "#skills" },
-  { label: "Projects",     href: "#projects" },
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Skills", href: "#skills" },
+  { label: "Projects", href: "#projects" },
   { label: "Achievements", href: "#achievements" },
-  { label: "Experience",   href: "#experience" },
-  { label: "Contact",      href: "#contact" },
+  { label: "Experience", href: "#experience" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export default function Navbar({ aiEnabled = false, setAiEnabled }) {
@@ -55,12 +55,14 @@ export default function Navbar({ aiEnabled = false, setAiEnabled }) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
           <Link to="/" onClick={(e) => { if (location.pathname === "/") { e.preventDefault(); scrollTo("#home"); } }}
             style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: "var(--accent-glow)",
+            <div style={{
+              width: 34, height: 34, borderRadius: 8, background: "var(--accent-glow)",
               border: "1px solid var(--accent-ring)", display: "flex", alignItems: "center",
               justifyContent: "center", fontFamily: "var(--font-mono)", fontSize: 13,
-              fontWeight: 700, color: "var(--accent)", letterSpacing: "0.05em" }}>AH</div>
+              fontWeight: 700, color: "var(--accent)", letterSpacing: "0.05em"
+            }}>AH</div>
             <span style={{ fontWeight: 600, fontSize: 15, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-              Ali Hassan
+              Syed Ali Hassan
             </span>
           </Link>
 
@@ -70,19 +72,23 @@ export default function Navbar({ aiEnabled = false, setAiEnabled }) {
               return (
                 <a key={link.href} href={link.href}
                   onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-                  style={{ padding: "6px 12px", borderRadius: 6, fontSize: 13, fontWeight: 500,
+                  style={{
+                    padding: "6px 12px", borderRadius: 6, fontSize: 13, fontWeight: 500,
                     textDecoration: "none", transition: "color 0.2s ease, background 0.2s ease",
                     color: isActive ? "var(--accent)" : "var(--text-secondary)",
-                    background: isActive ? "var(--accent-glow)" : "transparent" }}
+                    background: isActive ? "var(--accent-glow)" : "transparent"
+                  }}
                   onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = "var(--text-primary)"; }}
                   onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = "var(--text-secondary)"; }}
                 >{link.label}</a>
               );
             })}
             <a href="/SyedAliHassan-Resume(AI).pdf" target="_blank" rel="noopener noreferrer"
-              style={{ marginLeft: 12, padding: "7px 18px", borderRadius: 7, background: "transparent",
+              style={{
+                marginLeft: 12, padding: "7px 18px", borderRadius: 7, background: "transparent",
                 border: "1px solid var(--border-strong)", color: "var(--text-primary)", fontSize: 13,
-                fontWeight: 500, textDecoration: "none", transition: "all 0.2s ease" }}
+                fontWeight: 500, textDecoration: "none", transition: "all 0.2s ease"
+              }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--accent-dim)"; e.currentTarget.style.color = "var(--accent)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border-strong)"; e.currentTarget.style.color = "var(--text-primary)"; }}
             >Resume</a>
@@ -91,11 +97,15 @@ export default function Navbar({ aiEnabled = false, setAiEnabled }) {
                 <span style={{ fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Syed AI</span>
                 <button onClick={() => setAiEnabled(!aiEnabled)} role="switch" aria-checked={aiEnabled}
                   aria-label="Toggle AI assistant"
-                  style={{ position: "relative", width: 40, height: 22, borderRadius: 11,
+                  style={{
+                    position: "relative", width: 40, height: 22, borderRadius: 11,
                     background: aiEnabled ? "var(--accent)" : "var(--border-strong)",
-                    border: "none", cursor: "pointer", transition: "background 0.2s ease", outline: "none" }}>
-                  <span style={{ position: "absolute", top: 3, left: aiEnabled ? 21 : 3, width: 16, height: 16,
-                    borderRadius: "50%", background: "white", transition: "left 0.2s ease", display: "block" }} />
+                    border: "none", cursor: "pointer", transition: "background 0.2s ease", outline: "none"
+                  }}>
+                  <span style={{
+                    position: "absolute", top: 3, left: aiEnabled ? 21 : 3, width: 16, height: 16,
+                    borderRadius: "50%", background: "white", transition: "left 0.2s ease", display: "block"
+                  }} />
                 </button>
               </div>
             )}
@@ -121,15 +131,19 @@ export default function Navbar({ aiEnabled = false, setAiEnabled }) {
               {navLinks.map((link) => (
                 <a key={link.href} href={link.href}
                   onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-                  style={{ display: "block", padding: "12px 8px", fontSize: 15, fontWeight: 500,
+                  style={{
+                    display: "block", padding: "12px 8px", fontSize: 15, fontWeight: 500,
                     textDecoration: "none", color: activeSection === link.href.slice(1) ? "var(--accent)" : "var(--text-secondary)",
-                    borderBottom: "1px solid var(--border-subtle)", transition: "color 0.2s" }}
+                    borderBottom: "1px solid var(--border-subtle)", transition: "color 0.2s"
+                  }}
                 >{link.label}</a>
               ))}
               <a href="/SyedAliHassan-Resume(AI).pdf" target="_blank" rel="noopener noreferrer"
-                style={{ display: "inline-flex", marginTop: 16, padding: "9px 20px", borderRadius: 7,
+                style={{
+                  display: "inline-flex", marginTop: 16, padding: "9px 20px", borderRadius: 7,
                   border: "1px solid var(--border-strong)", color: "var(--text-primary)", fontSize: 13,
-                  fontWeight: 500, textDecoration: "none" }}>Resume</a>
+                  fontWeight: 500, textDecoration: "none"
+                }}>Resume</a>
             </div>
           </motion.div>
         )}
