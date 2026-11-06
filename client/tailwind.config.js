@@ -8,36 +8,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Dark surfaces — 4-level depth system
         surface: {
-          base:    '#080B10', // page background
-          raised:  '#0D1219', // section backgrounds
-          card:    '#111821', // card background
-          overlay: '#16202C', // modals/tooltips
+          base:    '#090D16',
+          raised:  '#0F1626',
+          card:    'rgba(18, 25, 40, 0.75)',
+          overlay: '#192338',
         },
-        // Borders
         border: {
-          DEFAULT: '#1D2935',
-          subtle:  '#151E28',
-          strong:  '#243040',
+          DEFAULT: 'rgba(255, 255, 255, 0.08)',
+          subtle:  'rgba(255, 255, 255, 0.04)',
+          strong:  'rgba(99, 102, 241, 0.3)',
         },
-        // Text
-        content: {
-          primary:   '#F3F5F7',
-          secondary: '#9AA6B2',
-          muted:     '#5C6B7A',
-        },
-        // Accent — teal only
-        teal: {
-          DEFAULT: '#2DD4BF',
-          dim:     '#1A8A7A',
-          glow:    'rgba(45,212,191,0.12)',
-          ring:    'rgba(45,212,191,0.25)',
-        },
-        // Legacy compat
         accent: {
-          teal: '#2DD4BF',
-          blue: '#2563eb',
+          DEFAULT: '#6366F1',
+          cyan:    '#06B6D4',
+          indigo:  '#6366F1',
+          dim:     '#4F46E5',
+          glow:    'rgba(99, 102, 241, 0.15)',
         },
         primary: {
           50:  '#f8fafc',
@@ -50,38 +37,12 @@ export default {
           700: '#334155',
           800: '#1e293b',
           900: '#0f172a',
+          950: '#090D16',
         },
       },
       fontFamily: {
-        sans:  ['Inter', 'system-ui', 'sans-serif'],
-        mono:  ['"Fira Code"', 'ui-monospace', 'monospace'],
-        serif: ['Inter', 'sans-serif'], // override – no Playfair
-      },
-      animation: {
-        'fade-up':     'fadeUp 0.6s ease both',
-        'grid-drift':  'gridDrift 20s linear infinite',
-        'orb-drift':   'orbDrift 12s ease-in-out infinite',
-        'particle':    'particleDrift 15s linear infinite',
-      },
-      keyframes: {
-        fadeUp: {
-          '0%':   { opacity: '0', transform: 'translateY(16px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        gridDrift: {
-          '0%':   { backgroundPosition: '0 0' },
-          '100%': { backgroundPosition: '60px 60px' },
-        },
-        orbDrift: {
-          '0%, 100%': { transform: 'translate(0,0) scale(1)' },
-          '50%':      { transform: 'translate(30px,-20px) scale(1.05)' },
-        },
-        particleDrift: {
-          '0%':   { transform: 'translateY(100vh)', opacity: '0' },
-          '10%':  { opacity: '1' },
-          '90%':  { opacity: '0.5' },
-          '100%': { transform: 'translateY(-20px)', opacity: '0' },
-        },
+        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
     },
   },

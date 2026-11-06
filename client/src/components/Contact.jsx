@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import axios from "axios";
 
 const socials = [
@@ -32,238 +32,225 @@ const socials = [
   },
 ];
 
-function Toast({ type, message }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -16 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -16 }}
-      style={{
-        position: "fixed", top: 88, right: 24, zIndex: 999,
-        padding: "12px 18px", borderRadius: 10,
-        background: type === "success" ? "rgba(16,185,129,0.12)" : "rgba(239,68,68,0.12)",
-        border: `1px solid ${type === "success" ? "rgba(16,185,129,0.3)" : "rgba(239,68,68,0.3)"}`,
-        color: type === "success" ? "#10B981" : "#EF4444",
-        display: "flex", alignItems: "center", gap: 10,
-        fontSize: 14, fontWeight: 500,
-        backdropFilter: "blur(8px)",
-      }}
-    >
-      <span>{type === "success" ? "✓" : "✕"}</span>
-      <span>{message}</span>
-    </motion.div>
-  );
-}
-
 export default function Contact() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
-  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState(null);
+  const [status, setStatus] = useState(null);
 
-  const showToast = (type, message) => {
-    setToast({ type, message });
-    setTimeout(() => setToast(null), 4000);
-  };
-
-  const validate = () => {
-    const e = {};
-    if (!form.name.trim()) e.name = "Name is required";
-    if (!form.email.trim()) e.email = "Email is required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Invalid email address";
-    if (!form.message.trim()) e.message = "Message is required";
-    return e;
-  };
-
-  const handleSubmit = async (ev) => {
-    ev.preventDefault();
-    const e = validate();
-    if (Object.keys(e).length) { setErrors(e); return; }
-    setErrors({});
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.message) return;
     setLoading(true);
+    setStatus(null);
+
     try {
-      await axios.post("/contact", form);
+      await axios.post("/api/contact", form);
+      setStatus({ type: "success", text: "Message transmitted successfully! I will get back to you shortly." });
       setForm({ name: "", email: "", subject: "", message: "" });
-      showToast("success", "Message sent! I'll get back to you soon.");
-    } catch (err) {
-      let msg = "Could not send message. Please try again.";
-      if (err.response) msg = err.response.data.details || err.response.data.error || msg;
-      else if (err.request) msg = "No response from server. Check your connection.";
-      showToast("error", msg);
+    } catch {
+      setStatus({ type: "error", text: "Direct send failed. Please reach me directly at syedali.hassan2040@gmail.com" });
     } finally {
       setLoading(false);
     }
   };
 
-  const inputStyle = (hasError) => ({
-    width: "100%", padding: "11px 14px",
-    background: "var(--surface-raised)",
-    border: `1px solid ${hasError ? "#EF4444" : "var(--border)"}`,
-    borderRadius: 10, color: "var(--text-primary)",
-    fontFamily: "var(--font-sans)", fontSize: 14, outline: "none",
-    transition: "border-color 0.2s, box-shadow 0.2s",
-  });
-
-  const labelStyle = {
-    display: "block", fontSize: 12, fontWeight: 500,
-    color: "var(--text-secondary)", marginBottom: 6,
-    fontFamily: "var(--font-mono)", letterSpacing: "0.04em",
-  };
-
   return (
-    <>
-      <AnimatePresence>{toast && <Toast {...toast} />}</AnimatePresence>
+    <section id="contact" ref={ref} style={{ background: "var(--surface-raised)", position: "relative" }}>
+      <div className="section-wrapper">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55 }}
+          style={{ marginBottom: 48 }}
+        >
+          <span className="section-label">Connect</span>
+          <h2 className="section-title">Get In Touch</h2>
+          <p className="section-sub">
+            Have a project in mind, want to explore agentic AI systems, or looking to collaborate? Send a message.
+          </p>
+        </motion.div>
 
-      <section id="contact" ref={ref} style={{ background: "var(--surface-raised)", position: "relative" }}>
-        <div className="section-wrapper">
-
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.2fr 1fr",
+            gap: 40,
+            alignItems: "start",
+          }}
+          className="contact-layout-grid"
+        >
+          {/* Form */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55 }}
-            style={{ marginBottom: 56 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="card"
+            style={{ padding: "clamp(24px, 4vw, 36px)" }}
           >
-            <span className="section-label">Contact</span>
-            <h2 className="section-title">Let's Talk</h2>
-            <p className="section-sub">
-              Open to full-time roles, freelance projects, and research collaborations.
-            </p>
-          </motion.div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 40, alignItems: "start" }} className="contact-grid">
-
-            {/* Left — info */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.15 }}
-            >
-              <div style={{
-                padding: "20px 22px", background: "var(--surface-card)",
-                border: "1px solid var(--border)", borderRadius: 12, marginBottom: 20,
-              }}>
-                <p style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)", marginBottom: 8 }}>
-                  Currently open to work
-                </p>
-                <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7 }}>
-                  Looking for AI/ML roles, full-stack positions, and interesting freelance work. Feel free to reach out directly.
-                </p>
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <div>
+                <label style={{ display: "block", fontSize: 13, fontFamily: "var(--font-mono)", color: "var(--text-secondary)", marginBottom: 8 }}>
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Alex Miller"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="form-input"
+                />
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {socials.map(({ label, href, icon }) => (
+              <div>
+                <label style={{ display: "block", fontSize: 13, fontFamily: "var(--font-mono)", color: "var(--text-secondary)", marginBottom: 8 }}>
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="name@company.com"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  className="form-input"
+                />
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: 13, fontFamily: "var(--font-mono)", color: "var(--text-secondary)", marginBottom: 8 }}>
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  placeholder="Project Collaboration / Opportunity"
+                  value={form.subject}
+                  onChange={(e) => setForm({ ...form, subject: e.target.value })}
+                  className="form-input"
+                />
+              </div>
+
+              <div>
+                <label style={{ display: "block", fontSize: 13, fontFamily: "var(--font-mono)", color: "var(--text-secondary)", marginBottom: 8 }}>
+                  Message
+                </label>
+                <textarea
+                  rows={5}
+                  required
+                  placeholder="Share details regarding your goal or inquiry..."
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className="form-input"
+                  style={{ resize: "vertical" }}
+                />
+              </div>
+
+              {status && (
+                <div
+                  style={{
+                    padding: "12px 14px",
+                    borderRadius: 8,
+                    fontSize: 13,
+                    fontFamily: "var(--font-mono)",
+                    background: status.type === "success" ? "rgba(16, 185, 129, 0.12)" : "rgba(239, 68, 68, 0.12)",
+                    border: `1px solid ${status.type === "success" ? "rgba(16, 185, 129, 0.3)" : "rgba(239, 68, 68, 0.3)"}`,
+                    color: status.type === "success" ? "#34d399" : "#f87171",
+                  }}
+                >
+                  {status.text}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-primary"
+                style={{ width: "100%", marginTop: 8 }}
+              >
+                {loading ? "Transmitting..." : "Send Message →"}
+              </button>
+            </form>
+          </motion.div>
+
+          {/* Direct channels */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            style={{ display: "flex", flexDirection: "column", gap: 20 }}
+          >
+            <div className="card" style={{ padding: 28 }}>
+              <h3 style={{ fontSize: 17, fontWeight: 700, color: "var(--text-primary)", marginBottom: 8 }}>
+                Direct Contact
+              </h3>
+              <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: 20 }}>
+                I am actively considering software engineering and AI/ML positions, research projects, and technical consulting.
+              </p>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {socials.map((s) => (
                   <a
-                    key={label}
-                    href={href}
+                    key={s.label}
+                    href={s.href}
                     target="_blank"
                     rel="noreferrer"
                     style={{
-                      display: "flex", alignItems: "center", gap: 12, padding: "12px 16px",
-                      background: "var(--surface-card)", border: "1px solid var(--border)",
-                      borderRadius: 10, color: "var(--text-secondary)", textDecoration: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      padding: "12px 16px",
+                      background: "rgba(255, 255, 255, 0.03)",
+                      border: "1px solid var(--border)",
+                      borderRadius: 10,
+                      color: "var(--text-primary)",
+                      fontSize: 14,
+                      textDecoration: "none",
                       transition: "all 0.2s ease",
                     }}
-                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--accent-dim)"; e.currentTarget.style.color = "var(--accent)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-secondary)"; }}
+                    className="contact-channel-hover"
                   >
-                    {icon}
-                    <span style={{ fontSize: 13, fontWeight: 500, color: "inherit" }}>{label}</span>
-                    <span style={{ marginLeft: "auto", fontSize: 12, color: "inherit" }}>→</span>
+                    <span style={{ color: "var(--accent-secondary)" }}>{s.icon}</span>
+                    <span style={{ fontWeight: 500 }}>{s.label}</span>
                   </a>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
-            {/* Right — form */}
-            <motion.form
-              onSubmit={handleSubmit}
-              initial={{ opacity: 0, x: 20 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.25 }}
+            <div
+              className="card"
               style={{
-                padding: "32px 32px",
-                background: "var(--surface-card)",
-                border: "1px solid var(--border)",
-                borderRadius: 14,
+                padding: 24,
+                background: "linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%)",
+                border: "1px solid var(--border-strong)",
               }}
             >
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }} className="form-row">
-                <div>
-                  <label style={labelStyle}>Name *</label>
-                  <input
-                    placeholder="Your name"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    style={inputStyle(errors.name)}
-                    onFocus={(e) => { e.target.style.borderColor = "var(--accent-dim)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
-                    onBlur={(e) => { e.target.style.borderColor = errors.name ? "#EF4444" : "var(--border)"; e.target.style.boxShadow = "none"; }}
-                  />
-                  {errors.name && <p style={{ fontSize: 12, color: "#EF4444", marginTop: 4 }}>{errors.name}</p>}
-                </div>
-                <div>
-                  <label style={labelStyle}>Email *</label>
-                  <input
-                    type="email"
-                    placeholder="you@example.com"
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    style={inputStyle(errors.email)}
-                    onFocus={(e) => { e.target.style.borderColor = "var(--accent-dim)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
-                    onBlur={(e) => { e.target.style.borderColor = errors.email ? "#EF4444" : "var(--border)"; e.target.style.boxShadow = "none"; }}
-                  />
-                  {errors.email && <p style={{ fontSize: 12, color: "#EF4444", marginTop: 4 }}>{errors.email}</p>}
-                </div>
+              <div style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--accent-secondary)", textTransform: "uppercase", marginBottom: 6 }}>
+                Location & Timezone
               </div>
-
-              <div style={{ marginBottom: 16 }}>
-                <label style={labelStyle}>Subject</label>
-                <input
-                  placeholder="What's this about?"
-                  value={form.subject}
-                  onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                  style={inputStyle(false)}
-                  onFocus={(e) => { e.target.style.borderColor = "var(--accent-dim)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
-                  onBlur={(e) => { e.target.style.borderColor = "var(--border)"; e.target.style.boxShadow = "none"; }}
-                />
+              <div style={{ fontSize: 15, fontWeight: 600, color: "var(--text-primary)" }}>
+                Lahore, Pakistan (PKT / UTC+5)
               </div>
-
-              <div style={{ marginBottom: 24 }}>
-                <label style={labelStyle}>Message *</label>
-                <textarea
-                  placeholder="Tell me about your project or opportunity..."
-                  rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  style={{ ...inputStyle(errors.message), resize: "vertical", minHeight: 120 }}
-                  onFocus={(e) => { e.target.style.borderColor = "var(--accent-dim)"; e.target.style.boxShadow = "0 0 0 3px var(--accent-glow)"; }}
-                  onBlur={(e) => { e.target.style.borderColor = errors.message ? "#EF4444" : "var(--border)"; e.target.style.boxShadow = "none"; }}
-                />
-                {errors.message && <p style={{ fontSize: 12, color: "#EF4444", marginTop: 4 }}>{errors.message}</p>}
-              </div>
-
-              <motion.button
-                type="submit"
-                disabled={loading}
-                whileHover={!loading ? { y: -1 } : {}}
-                whileTap={!loading ? { scale: 0.98 } : {}}
-                className="btn-primary"
-                style={{ width: "100%", opacity: loading ? 0.7 : 1, cursor: loading ? "not-allowed" : "pointer" }}
-              >
-                {loading ? "Sending..." : "Send Message →"}
-              </motion.button>
-            </motion.form>
-          </div>
+              <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>
+                Available for remote workflows worldwide.
+              </p>
+            </div>
+          </motion.div>
         </div>
+      </div>
 
-        <style>{`
-          @media (max-width: 768px) {
-            .contact-grid { grid-template-columns: 1fr !important; }
-            .form-row { grid-template-columns: 1fr !important; }
+      <style>{`
+        @media (max-width: 900px) {
+          .contact-layout-grid {
+            grid-template-columns: 1fr !important;
           }
-        `}</style>
-      </section>
-    </>
+        }
+        .contact-channel-hover:hover {
+          border-color: var(--accent) !important;
+          background: rgba(99, 102, 241, 0.1) !important;
+          transform: translateX(4px);
+        }
+      `}</style>
+    </section>
   );
 }
