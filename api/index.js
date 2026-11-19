@@ -22,11 +22,14 @@ if (MONGO_URI) {
     .catch((err) => console.warn("⚠️  MongoDB connection error:", err.message));
 }
 
+const emailUser = (process.env.EMAIL_USER || "").trim();
+const emailPass = (process.env.EMAIL_PASS || "").replace(/\s+/g, "");
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: emailUser,
+    pass: emailPass,
   },
 });
 
