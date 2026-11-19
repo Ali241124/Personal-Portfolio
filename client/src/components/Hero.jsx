@@ -1,448 +1,207 @@
-import { useRef, useEffect, useCallback, useState } from "react";
 import { motion } from "framer-motion";
 
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+});
+
+const STATS = [
+  { label: "Projects Built", value: "12+" },
+  { label: "Certifications", value: "5" },
+  { label: "AI Systems", value: "7+" },
+];
+
 export default function Hero() {
-  const canvasRef = useRef(null);
-  const [activeTab, setActiveTab] = useState("profile");
-
-  const initCanvas = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    let W = (canvas.width = canvas.offsetWidth);
-    let H = (canvas.height = canvas.offsetHeight);
-    let animId;
-
-    const particles = Array.from({ length: 24 }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      size: Math.random() * 1.4 + 0.4,
-      speedX: (Math.random() - 0.5) * 0.12,
-      speedY: -Math.random() * 0.2 - 0.05,
-      opacity: Math.random() * 0.3 + 0.05,
-    }));
-
-    const draw = () => {
-      ctx.clearRect(0, 0, W, H);
-      particles.forEach((p) => {
-        p.x += p.speedX;
-        p.y += p.speedY;
-        if (p.y < -10) {
-          p.y = H + 10;
-          p.x = Math.random() * W;
-        }
-        if (p.x < -10) p.x = W + 10;
-        if (p.x > W + 10) p.x = -10;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(45,212,191,${p.opacity})`;
-        ctx.fill();
-      });
-      animId = requestAnimationFrame(draw);
-    };
-
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!prefersReduced) draw();
-
-    const onResize = () => {
-      if (!canvas) return;
-      W = canvas.width = canvas.offsetWidth;
-      H = canvas.height = canvas.offsetHeight;
-    };
-    window.addEventListener("resize", onResize);
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", onResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    const cleanup = initCanvas();
-    return cleanup;
-  }, [initCanvas]);
-
   return (
-    <section
-      id="home"
-      style={{
-        position: "relative",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        background: "var(--surface-base)",
-        overflow: "hidden",
-        paddingTop: "clamp(88px, 12vh, 120px)",
-        paddingBottom: 64,
-      }}
-    >
-      {/* Background accents */}
-      <div className="bg-grid" />
-      <div className="bg-orb bg-orb-1" />
-      <div className="bg-orb bg-orb-2" />
+    <section id="home" style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      position: "relative",
+      overflow: "hidden",
+      paddingTop: "clamp(80px, 12vw, 120px)",
+      paddingBottom: 80,
+    }}>
+      {/* Background orbs */}
+      <div className="glow-orb glow-orb-violet" style={{ top: "-10%", right: "-5%", opacity: 0.7 }} />
+      <div className="glow-orb glow-orb-cyan" style={{ bottom: "5%", left: "-5%", opacity: 0.6 }} />
 
-      {/* Particle canvas */}
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-        aria-hidden="true"
-      />
+      {/* Subtle dot grid */}
+      <div style={{
+        position: "absolute", inset: 0, opacity: 0.3,
+        backgroundImage: "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
+        backgroundSize: "32px 32px",
+        pointerEvents: "none",
+      }}/>
 
-      <div
-        style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-          padding: "0 24px",
-          position: "relative",
-          zIndex: 2,
-          width: "100%",
-        }}
-      >
-        <div className="hero-content-grid">
-          {/* Left Column: Introductions & CTA */}
-          <div style={{ maxWidth: 640 }}>
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              style={{ marginBottom: 20 }}
-            >
-              <span className="section-label">
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: 7,
-                    height: 7,
-                    borderRadius: "50%",
-                    background: "var(--accent)",
-                    boxShadow: "0 0 8px var(--accent)",
-                  }}
-                />
-                MS Artificial Intelligence · UET Lahore
-              </span>
+      <div className="container" style={{ position: "relative", zIndex: 2, width: "100%" }}>
+        <div className="hero-grid">
+
+          {/* ── LEFT: Text content ── */}
+          <div>
+            {/* Eyebrow */}
+            <motion.div {...fadeUp(0)}>
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                padding: "6px 16px", marginBottom: 28,
+                background: "rgba(139,92,246,0.1)",
+                border: "1px solid rgba(139,92,246,0.3)",
+                borderRadius: 100,
+              }}>
+                <span style={{
+                  width: 8, height: 8, borderRadius: "50%",
+                  background: "#22c55e", boxShadow: "0 0 10px #22c55e",
+                }}/>
+                <span style={{ fontSize: 12.5, fontFamily: "var(--mono)", color: "var(--violet)", letterSpacing: "0.06em" }}>
+                  MS Artificial Intelligence · UET Lahore
+                </span>
+              </div>
             </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.1 }}
-              style={{
-                fontSize: "clamp(32px, 5.2vw, 58px)",
-                fontWeight: 800,
-                lineHeight: 1.12,
-                letterSpacing: "-0.03em",
-                marginBottom: 14,
-              }}
-            >
-              Syed Ali Hassan
+            {/* Name */}
+            <motion.h1 {...fadeUp(0.08)} style={{
+              fontSize: "clamp(38px, 6vw, 68px)",
+              fontWeight: 800, lineHeight: 1.08,
+              letterSpacing: "-0.035em", marginBottom: 16,
+              color: "var(--text-1)",
+            }}>
+              Syed Ali<br/>
+              <span style={{ background: "var(--grad-primary)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hassan</span>
             </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.18 }}
-              style={{
-                fontSize: "clamp(17px, 2.2vw, 22px)",
-                color: "var(--accent)",
-                fontWeight: 500,
-                marginBottom: 20,
-                letterSpacing: "-0.01em",
-              }}
-            >
-              AI/ML Engineer & Full-Stack Developer
+            {/* Role */}
+            <motion.p {...fadeUp(0.16)} style={{
+              fontSize: "clamp(18px, 2.4vw, 22px)",
+              color: "var(--text-2)", fontWeight: 400,
+              marginBottom: 24, lineHeight: 1.5,
+            }}>
+              AI/ML Engineer{" "}
+              <span style={{ color: "var(--border-hover)", margin: "0 10px" }}>·</span>
+              {" "}Full-Stack Developer
             </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.27 }}
-              style={{
-                fontSize: "clamp(15px, 1.8vw, 16px)",
-                color: "var(--text-secondary)",
-                lineHeight: 1.75,
-                marginBottom: 36,
-              }}
-            >
-              Engineering autonomous agentic workflows, production RAG pipelines, and full-stack AI web systems. Dedicated to bridging rigorous machine learning models with responsive user interfaces.
+            {/* Bio */}
+            <motion.p {...fadeUp(0.22)} style={{
+              fontSize: 16, color: "var(--text-2)",
+              lineHeight: 1.8, maxWidth: 520, marginBottom: 40,
+            }}>
+              I build production-grade AI systems — from autonomous agentic workflows and RAG pipelines
+              to computer vision models — and ship them as polished, responsive web applications.
             </motion.p>
 
-            {/* Quick Stat Pill Highlights */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.32 }}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
-                gap: 12,
-                marginBottom: 36,
-              }}
-            >
-              <div
-                style={{
-                  background: "var(--surface-card)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 10,
-                  padding: "12px 14px",
-                }}
-              >
-                <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--text-muted)", textTransform: "uppercase" }}>Focus</div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>Agentic AI & RAG</div>
-              </div>
-              <div
-                style={{
-                  background: "var(--surface-card)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 10,
-                  padding: "12px 14px",
-                }}
-              >
-                <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--text-muted)", textTransform: "uppercase" }}>Core Stack</div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>Python · PyTorch · React</div>
-              </div>
-              <div
-                style={{
-                  background: "var(--surface-card)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 10,
-                  padding: "12px 14px",
-                }}
-              >
-                <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--text-muted)", textTransform: "uppercase" }}>Availability</div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--accent)", marginTop: 2 }}>Open to Roles</div>
-              </div>
-            </motion.div>
-
-            {/* Action Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.38 }}
-              style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}
-            >
-              <a
-                href="#projects"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="btn-primary"
-              >
+            {/* CTA Buttons */}
+            <motion.div {...fadeUp(0.3)} style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 56 }}>
+              <a href="#projects"
+                onClick={e => { e.preventDefault(); document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" }); }}
+                className="btn-primary">
                 Explore Projects →
               </a>
-              <a
-                href="https://github.com/Ali241124"
-                target="_blank"
-                rel="noreferrer"
-                className="btn-secondary"
-              >
+              <a href="https://github.com/Ali241124" target="_blank" rel="noreferrer" className="btn-outline">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd"/>
+                </svg>
                 GitHub
               </a>
-              <a
-                href="/SyedAliHassan-Resume(AI).pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="btn-secondary"
-              >
+              <a href="/SyedAliHassan-Resume(AI).pdf" target="_blank" rel="noreferrer" className="btn-outline">
                 Resume ↗
               </a>
             </motion.div>
+
+            {/* Stats */}
+            <motion.div {...fadeUp(0.38)} style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
+              {STATS.map(({ label, value }, i) => (
+                <div key={label}>
+                  {i > 0 && <div style={{ width: 1, height: 40, background: "var(--border)", display: "inline-block", marginRight: 32, verticalAlign: "middle" }}/>}
+                  <div style={{ display: "inline-block" }}>
+                    <div style={{ fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 800, letterSpacing: "-0.03em", background: "var(--grad-primary)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{value}</div>
+                    <div style={{ fontSize: 12.5, color: "var(--text-2)", fontFamily: "var(--mono)", marginTop: 2 }}>{label}</div>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
           </div>
 
-          {/* Right Column: Interactive Developer Terminal Card */}
+          {/* ── RIGHT: Profile card ── */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="hero-terminal-card"
+            initial={{ opacity: 0, scale: 0.94, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="hero-card"
           >
-            <div
-              style={{
-                background: "var(--surface-card)",
-                border: "1px solid var(--border)",
-                borderRadius: 16,
-                overflow: "hidden",
-                boxShadow: "0 20px 40px rgba(0,0,0,0.45)",
-                width: "100%",
-                maxWidth: 440,
-              }}
-            >
-              {/* Terminal Window Header */}
-              <div
-                style={{
-                  padding: "12px 16px",
-                  background: "var(--surface-raised)",
-                  borderBottom: "1px solid var(--border-subtle)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+            {/* Photo */}
+            <div style={{
+              width: "100%",
+              aspectRatio: "4/5",
+              borderRadius: "var(--r-xl)",
+              overflow: "hidden",
+              border: "1px solid var(--border)",
+              background: "var(--surface)",
+              position: "relative",
+              maxWidth: 380,
+              margin: "0 auto",
+            }}>
+              <img
+                src="/profile.jpeg"
+                alt="Syed Ali Hassan"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                onError={e => {
+                  // Fallback if no image
+                  e.currentTarget.style.display = "none";
+                  e.currentTarget.parentElement.innerHTML += `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:72px;font-weight:800;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">AH</div>`;
                 }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#ef4444" }} />
-                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#f59e0b" }} />
-                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#10b981" }} />
-                </div>
-                <div style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
-                  engineer.config.ts
-                </div>
-                <div style={{ display: "flex", gap: 6 }}>
-                  <button
-                    onClick={() => setActiveTab("profile")}
-                    style={{
-                      background: activeTab === "profile" ? "var(--border)" : "transparent",
-                      border: "none",
-                      color: activeTab === "profile" ? "var(--accent)" : "var(--text-muted)",
-                      fontSize: 11,
-                      fontFamily: "var(--font-mono)",
-                      cursor: "pointer",
-                      padding: "2px 8px",
-                      borderRadius: 4,
-                    }}
-                  >
-                    Profile
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("stack")}
-                    style={{
-                      background: activeTab === "stack" ? "var(--border)" : "transparent",
-                      border: "none",
-                      color: activeTab === "stack" ? "var(--accent)" : "var(--text-muted)",
-                      fontSize: 11,
-                      fontFamily: "var(--font-mono)",
-                      cursor: "pointer",
-                      padding: "2px 8px",
-                      borderRadius: 4,
-                    }}
-                  >
-                    Stack
-                  </button>
-                </div>
+              />
+              {/* Gradient overlay at bottom */}
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: "40%",
+                background: "linear-gradient(to top, rgba(10,10,18,0.9) 0%, transparent 100%)",
+              }}/>
+              {/* Name chip */}
+              <div style={{
+                position: "absolute", bottom: 20, left: 20, right: 20,
+                background: "rgba(18,18,31,0.85)",
+                backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+                border: "1px solid var(--border-hover)",
+                borderRadius: 12, padding: "12px 16px",
+              }}>
+                <div style={{ fontWeight: 700, fontSize: 15, color: "var(--text-1)" }}>Syed Ali Hassan</div>
+                <div style={{ fontSize: 12.5, color: "var(--violet)", fontFamily: "var(--mono)", marginTop: 2 }}>AI/ML Engineer</div>
               </div>
+            </div>
 
-              {/* Terminal Body */}
-              <div
-                style={{
-                  padding: "20px 22px",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 13,
-                  lineHeight: 1.6,
-                  color: "var(--text-secondary)",
-                }}
-              >
-                {activeTab === "profile" ? (
-                  <>
-                    <p style={{ color: "var(--text-muted)", marginBottom: 8 }}>
-                      <span style={{ color: "var(--accent)" }}>&gt;</span> cat profile.json
-                    </p>
-                    <div style={{ color: "var(--text-primary)" }}>&#123;</div>
-                    <div style={{ paddingLeft: 16 }}>
-                      <div>
-                        <span style={{ color: "#38bdf8" }}>"name"</span>: <span style={{ color: "#a78bfa" }}>"Syed Ali Hassan"</span>,
-                      </div>
-                      <div>
-                        <span style={{ color: "#38bdf8" }}>"role"</span>: <span style={{ color: "#a78bfa" }}>"Software & AI Engineer"</span>,
-                      </div>
-                      <div>
-                        <span style={{ color: "#38bdf8" }}>"education"</span>: &#123;
-                      </div>
-                      <div style={{ paddingLeft: 16 }}>
-                        <div>
-                          <span style={{ color: "#38bdf8" }}>"current"</span>: <span style={{ color: "#34d399" }}>"MS AI @ UET Lahore"</span>,
-                        </div>
-                        <div>
-                          <span style={{ color: "#38bdf8" }}>"undergrad"</span>: <span style={{ color: "#34d399" }}>"BS Software Eng @ UCP"</span>
-                        </div>
-                      </div>
-                      <div style={{ paddingLeft: 0 }}>&#125;,</div>
-                      <div>
-                        <span style={{ color: "#38bdf8" }}>"passions"</span>: [
-                      </div>
-                      <div style={{ paddingLeft: 16, color: "#facc15" }}>
-                        "Agentic Workflows", "Vector Search RAG", "Deep Learning"
-                      </div>
-                      <div>]</div>
-                    </div>
-                    <div style={{ color: "var(--text-primary)" }}>&#125;</div>
-                  </>
-                ) : (
-                  <>
-                    <p style={{ color: "var(--text-muted)", marginBottom: 8 }}>
-                      <span style={{ color: "var(--accent)" }}>&gt;</span> ./show_stack.sh
-                    </p>
-                    <div style={{ marginBottom: 6 }}>
-                      <span style={{ color: "var(--accent)" }}>AI & ML:</span> PyTorch, TensorFlow, HuggingFace, YOLOv8, LangGraph
-                    </div>
-                    <div style={{ marginBottom: 6 }}>
-                      <span style={{ color: "var(--accent)" }}>Backend:</span> Python, FastAPI, Node.js, Express, PostgreSQL, ChromaDB
-                    </div>
-                    <div style={{ marginBottom: 6 }}>
-                      <span style={{ color: "var(--accent)" }}>Frontend:</span> React, TypeScript, Tailwind CSS, Vite
-                    </div>
-                    <div>
-                      <span style={{ color: "var(--accent)" }}>Tools:</span> Docker, Git, Linux, Ollama, REST APIs
-                    </div>
-                  </>
-                )}
-
-                <div
-                  style={{
-                    marginTop: 18,
-                    paddingTop: 14,
-                    borderTop: "1px dashed var(--border)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    fontSize: 12,
-                  }}
-                >
-                  <span style={{ color: "var(--text-muted)" }}>status: 0 errors</span>
-                  <span style={{ color: "var(--accent)", display: "flex", alignItems: "center", gap: 6 }}>
-                    <span
-                      style={{
-                        width: 6,
-                        height: 6,
-                        borderRadius: "50%",
-                        background: "var(--accent)",
-                        animation: "pulse 2s infinite",
-                      }}
-                    />
-                    ready
-                  </span>
+            {/* Info pills */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 16, maxWidth: 380, margin: "16px auto 0" }}>
+              {[
+                { label: "🎓", text: "MS AI — UET Lahore", accent: false },
+                { label: "💡", text: "Focus: Agentic AI & RAG Pipelines", accent: true },
+                { label: "📍", text: "Lahore, Pakistan (Remote-friendly)", accent: false },
+              ].map(({ label, text, accent }) => (
+                <div key={text} style={{
+                  display: "flex", alignItems: "center", gap: 12,
+                  padding: "11px 16px", borderRadius: 10,
+                  background: accent ? "rgba(139,92,246,0.1)" : "var(--surface)",
+                  border: `1px solid ${accent ? "var(--border-accent)" : "var(--border)"}`,
+                }}>
+                  <span style={{ fontSize: 16 }}>{label}</span>
+                  <span style={{ fontSize: 13.5, color: accent ? "var(--violet)" : "var(--text-2)", fontWeight: accent ? 600 : 400 }}>{text}</span>
                 </div>
-              </div>
+              ))}
             </div>
           </motion.div>
         </div>
       </div>
 
       <style>{`
-        .hero-content-grid {
+        .hero-grid {
           display: grid;
-          grid-template-columns: 1.2fr 1fr;
-          gap: 48px;
+          grid-template-columns: 1.1fr 0.9fr;
+          gap: 60px;
           align-items: center;
         }
-        @media (max-width: 960px) {
-          .hero-content-grid {
-            grid-template-columns: 1fr;
-            gap: 40px;
-          }
-          .hero-terminal-card {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-          }
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
+        .hero-card { width: 100%; }
+        @media (max-width: 1000px) {
+          .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+          .hero-card { order: -1; }
         }
       `}</style>
     </section>

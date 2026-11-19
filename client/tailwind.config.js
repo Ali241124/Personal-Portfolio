@@ -8,42 +8,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        surface: {
-          base:    '#090D16',
-          raised:  '#0F1626',
-          card:    'rgba(18, 25, 40, 0.75)',
-          overlay: '#192338',
-        },
-        border: {
-          DEFAULT: 'rgba(255, 255, 255, 0.08)',
-          subtle:  'rgba(255, 255, 255, 0.04)',
-          strong:  'rgba(99, 102, 241, 0.3)',
-        },
-        accent: {
-          DEFAULT: '#6366F1',
-          cyan:    '#06B6D4',
-          indigo:  '#6366F1',
-          dim:     '#4F46E5',
-          glow:    'rgba(99, 102, 241, 0.15)',
-        },
-        primary: {
-          50:  '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#090D16',
-        },
+        violet: { DEFAULT: '#8b5cf6', dim: '#6d28d9', dark: '#4c1d95' },
+        cyan:   { DEFAULT: '#22d3ee', dim: '#0891b2' },
+        bg:     { DEFAULT: '#0a0a12', secondary: '#0f0f1a' },
+        surface: { DEFAULT: '#12121f', high: '#1a1a2e', hover: '#1e1e35' },
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%)',
+      }
     },
   },
   plugins: [],
