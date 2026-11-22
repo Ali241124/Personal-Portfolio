@@ -2,9 +2,9 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 const TYPE_COLORS = {
-  work:      { bg: "rgba(139,92,246,0.12)", border: "rgba(139,92,246,0.3)", text: "#a78bfa", label: "Work" },
+  work: { bg: "rgba(139,92,246,0.12)", border: "rgba(139,92,246,0.3)", text: "#a78bfa", label: "Work" },
   education: { bg: "rgba(34,211,238,0.10)", border: "rgba(34,211,238,0.28)", text: "#67e8f9", label: "Edu" },
-  cert:      { bg: "rgba(16,185,129,0.10)", border: "rgba(16,185,129,0.28)", text: "#6ee7b7", label: "Cert" },
+  cert: { bg: "rgba(16,185,129,0.10)", border: "rgba(16,185,129,0.28)", text: "#6ee7b7", label: "Cert" },
 };
 
 const timeline = [
@@ -15,30 +15,6 @@ const timeline = [
     type: "education",
     description: "Master's research focusing on multi-agent collaboration frameworks, stateful graph reasoning with LangGraph, and optimized transformer inference pipelines.",
     tags: ["Agentic AI", "Deep Learning", "LangGraph", "PyTorch"],
-  },
-  {
-    period: "2024 – Present",
-    title: "AI Systems & Full-Stack Developer",
-    place: "Independent Projects & Open Source",
-    type: "work",
-    description: "Architected end-to-end applications spanning agentic code repair pipelines, self-healing workflow executors, computer vision systems (YOLOv8), and enterprise RAG bots.",
-    tags: ["FastAPI", "PostgreSQL", "Docker", "React", "ChromaDB"],
-  },
-  {
-    period: "2024",
-    title: "Deep Learning Specialization",
-    place: "DeepLearning.AI · Coursera",
-    type: "cert",
-    description: "Comprehensive mastery of deep neural networks, hyperparameter optimization, convolutional architectures, and attention-based sequence modeling under Andrew Ng.",
-    tags: ["CNN", "RNN", "Attention Mechanisms", "Optimization"],
-  },
-  {
-    period: "2024",
-    title: "AWS Certified Solutions Architect",
-    place: "Amazon Web Services",
-    type: "cert",
-    description: "Demonstrated technical skills in architecting secure, reliable, and cost-effective distributed systems and cloud workloads on AWS infrastructure.",
-    tags: ["Cloud Architecture", "VPC", "Security", "High Availability"],
   },
   {
     period: "2022 – 2026",
