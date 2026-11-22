@@ -44,31 +44,22 @@ export default function Navbar({ aiEnabled, setAiEnabled }) {
     <header style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
       transition: "all 0.3s ease",
-      background: scrolled ? "rgba(10,10,18,0.88)" : "transparent",
+      background: scrolled ? "rgba(10,10,18,0.92)" : "transparent",
       backdropFilter: scrolled ? "blur(20px)" : "none",
       WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
       borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
     }}>
       <div className="container">
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
 
-          {/* Logo */}
+          {/* Logo / Brand Name (Removed AH box as requested) */}
           <Link to="/" onClick={e => { if (location.pathname === "/") { e.preventDefault(); goto("#home"); }}}
-            style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 10,
-              background: "var(--grad-primary)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontFamily: "var(--mono)", fontSize: 13, fontWeight: 700, color: "#fff",
-              boxShadow: "0 0 20px rgba(139,92,246,0.4)",
-            }}>AH</div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 15, color: "var(--text-1)", letterSpacing: "-0.02em" }}>
-                Syed Ali Hassan
-              </div>
-              <div style={{ fontSize: 11, fontFamily: "var(--mono)", color: "var(--violet)", letterSpacing: "0.04em" }}>
-                AI Engineer
-              </div>
+            style={{ display: "flex", flexDirection: "column", textDecoration: "none" }}>
+            <div style={{ fontWeight: 800, fontSize: "clamp(16px, 3.5vw, 18px)", color: "var(--text-1)", letterSpacing: "-0.03em" }}>
+              Syed Ali <span style={{ background: "var(--grad-primary)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hassan</span>
+            </div>
+            <div style={{ fontSize: 11, fontFamily: "var(--mono)", color: "var(--violet)", letterSpacing: "0.05em", marginTop: -1 }}>
+              AI Engineer
             </div>
           </Link>
 
@@ -80,7 +71,7 @@ export default function Navbar({ aiEnabled, setAiEnabled }) {
                 <a key={href} href={href}
                   onClick={e => { e.preventDefault(); goto(href); }}
                   style={{
-                    padding: "7px 13px", borderRadius: 8, fontSize: 13.5, fontWeight: 500,
+                    padding: "7px 12px", borderRadius: 8, fontSize: 13, fontWeight: 500,
                     textDecoration: "none", transition: "all 0.2s",
                     color: active ? "#fff" : "var(--text-2)",
                     background: active ? "rgba(139,92,246,0.18)" : "transparent",
@@ -94,28 +85,29 @@ export default function Navbar({ aiEnabled, setAiEnabled }) {
 
             <a href="/SyedAliHassan-Resume(AI).pdf" target="_blank" rel="noreferrer"
               style={{
-                marginLeft: 8, padding: "8px 18px", borderRadius: 8,
+                marginLeft: 6, padding: "7px 16px", borderRadius: 8,
                 background: "var(--grad-primary)", color: "#fff",
-                fontSize: 13, fontWeight: 600, textDecoration: "none",
+                fontSize: 12.5, fontWeight: 600, textDecoration: "none",
                 boxShadow: "0 4px 14px rgba(139,92,246,0.35)",
                 transition: "all 0.2s",
+                whiteSpace: "nowrap",
               }}
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(139,92,246,0.5)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(139,92,246,0.35)"; }}
             >Resume ↗</a>
 
             {setAiEnabled && (
-              <div style={{ marginLeft: 12, paddingLeft: 12, borderLeft: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 8 }}>
+              <div style={{ marginLeft: 8, paddingLeft: 10, borderLeft: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ fontSize: 11, color: "var(--text-3)", fontFamily: "var(--mono)" }}>AI</span>
                 <button onClick={() => setAiEnabled(!aiEnabled)} role="switch" aria-checked={aiEnabled} aria-label="Toggle AI"
                   style={{
-                    position: "relative", width: 38, height: 20, borderRadius: 10,
+                    position: "relative", width: 36, height: 18, borderRadius: 10,
                     background: aiEnabled ? "var(--grad-primary)" : "rgba(255,255,255,0.1)",
                     border: "none", cursor: "pointer", transition: "all 0.2s", outline: "none",
                   }}>
                   <span style={{
-                    position: "absolute", top: 2, left: aiEnabled ? 20 : 2,
-                    width: 16, height: 16, borderRadius: "50%",
+                    position: "absolute", top: 1, left: aiEnabled ? 19 : 2,
+                    width: 15, height: 15, borderRadius: "50%",
                     background: "#fff", transition: "left 0.2s",
                     boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
                   }}/>
@@ -132,17 +124,18 @@ export default function Navbar({ aiEnabled, setAiEnabled }) {
               borderRadius: 8, cursor: "pointer", padding: "8px 10px", color: "var(--text-1)",
             }}>
             <div style={{ width: 20, display: "flex", flexDirection: "column", gap: 5 }}>
-              {[
-                menuOpen ? "rotate(45deg) translateY(7px)" : "none",
-                menuOpen ? undefined : "none",
-                menuOpen ? "rotate(-45deg) translateY(-7px)" : "none",
-              ].map((transform, i) => (
-                <span key={i} style={{
-                  display: "block", height: 2, width: "100%",
-                  background: "currentColor", borderRadius: 1, transition: "all 0.25s",
-                  transform, opacity: i === 1 ? (menuOpen ? 0 : 1) : 1,
-                }}/>
-              ))}
+              <span style={{
+                display: "block", height: 2, width: "100%", background: "currentColor", borderRadius: 1, transition: "all 0.25s",
+                transform: menuOpen ? "rotate(45deg) translateY(7px)" : "none",
+              }}/>
+              <span style={{
+                display: "block", height: 2, width: "100%", background: "currentColor", borderRadius: 1, transition: "all 0.25s",
+                opacity: menuOpen ? 0 : 1,
+              }}/>
+              <span style={{
+                display: "block", height: 2, width: "100%", background: "currentColor", borderRadius: 1, transition: "all 0.25s",
+                transform: menuOpen ? "rotate(-45deg) translateY(-7px)" : "none",
+              }}/>
             </div>
           </button>
         </div>
@@ -153,12 +146,12 @@ export default function Navbar({ aiEnabled, setAiEnabled }) {
         {menuOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
             style={{ background: "rgba(10,10,18,0.98)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--border)" }}>
-            <div style={{ padding: "16px 24px 28px", display: "flex", flexDirection: "column", gap: 2 }}>
+            <div style={{ padding: "16px 20px 24px", display: "flex", flexDirection: "column", gap: 2 }}>
               {NAV.map(({ label, href }) => (
                 <a key={href} href={href}
                   onClick={e => { e.preventDefault(); goto(href); }}
                   style={{
-                    display: "block", padding: "12px 14px", fontSize: 15, fontWeight: 500,
+                    display: "block", padding: "10px 12px", fontSize: 14.5, fontWeight: 500,
                     borderRadius: 8, textDecoration: "none", transition: "color 0.2s",
                     color: activeSection === href.slice(1) ? "var(--violet)" : "var(--text-2)",
                     background: activeSection === href.slice(1) ? "rgba(139,92,246,0.1)" : "transparent",
@@ -167,8 +160,8 @@ export default function Navbar({ aiEnabled, setAiEnabled }) {
               <a href="/SyedAliHassan-Resume(AI).pdf" target="_blank" rel="noreferrer"
                 style={{
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  marginTop: 12, padding: "12px 20px", borderRadius: 10,
-                  background: "var(--grad-primary)", color: "#fff", fontSize: 14, fontWeight: 600,
+                  marginTop: 10, padding: "11px 18px", borderRadius: 8,
+                  background: "var(--grad-primary)", color: "#fff", fontSize: 13.5, fontWeight: 600,
                 }}>View Resume ↗</a>
             </div>
           </motion.div>

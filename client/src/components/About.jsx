@@ -27,6 +27,12 @@ const interests = [
   "React & Full-Stack",
 ];
 
+const highlights = [
+  { metric: "12+", label: "Completed Projects", desc: "Agentic AI systems, RAG workflows & web platforms" },
+  { metric: "5", label: "Professional Certifications", desc: "AWS Solutions Architect & DeepLearning.AI" },
+  { metric: "7+", label: "Autonomous AI Pipelines", desc: "Built with LangGraph, CrewAI, Ollama & YOLO" },
+];
+
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
@@ -44,7 +50,7 @@ export default function About() {
       <div className="section-wrapper" style={{ position: "relative", zIndex: 1 }}>
 
         {/* Section header */}
-        <motion.div {...fadeUp()} style={{ marginBottom: 56 }}>
+        <motion.div {...fadeUp()} style={{ marginBottom: 40 }}>
           <span className="section-label">Background</span>
           <h2 className="section-title" style={{ marginTop: 12 }}>
             Engineering with <span>Purpose</span>
@@ -54,69 +60,65 @@ export default function About() {
           </p>
         </motion.div>
 
+        {/* Clean Responsive 2-Column Layout (No duplicate profile image) */}
         <div className="about-grid">
 
-          {/* Left — Photo + Interest Tags */}
-          <motion.div {...fadeUp(0.1)}>
-            {/* Profile photo */}
-            <div style={{
-              width: "100%",
-              aspectRatio: "4/5",
-              borderRadius: "var(--r-xl)",
-              overflow: "hidden",
-              border: "1px solid var(--border)",
-              background: "var(--surface)",
-              marginBottom: 20,
-              boxShadow: "0 24px 48px rgba(0,0,0,0.4)",
-              position: "relative",
-            }}>
-              <img
-                src="/profile.jpeg"
-                alt="Syed Ali Hassan"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-              {/* Subtle gradient frame */}
-              <div style={{
-                position: "absolute", inset: 0,
-                borderRadius: "inherit",
-                boxShadow: "inset 0 0 0 1px rgba(139,92,246,0.15)",
-                pointerEvents: "none",
-              }} />
+          {/* Left Column — Philosophy, Core Focus & Tags */}
+          <motion.div {...fadeUp(0.1)} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <div className="card" style={{ padding: "clamp(20px, 4vw, 32px)" }}>
+              <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", marginBottom: 14 }}>
+                Software & AI Engineering
+              </h3>
+              <p style={{ fontSize: 15, color: "var(--text-2)", lineHeight: 1.8, marginBottom: 16 }}>
+                I am <strong style={{ color: "var(--text-1)", fontWeight: 700 }}>Syed Ali Hassan</strong>, a Software Engineer pursuing an MS in Artificial Intelligence at UET Lahore.
+              </p>
+              <p style={{ fontSize: 15, color: "var(--text-2)", lineHeight: 1.8, marginBottom: 16 }}>
+                My engineering focus is centered on <strong style={{ color: "var(--cyan)" }}>Agentic AI architectures</strong>, <strong style={{ color: "var(--cyan)" }}>RAG pipelines</strong>, and modern full-stack development. I build self-healing agent loops, multi-agent synthesis teams, and fast inferencing backends integrated with modern React frontends.
+              </p>
+              <p style={{ fontSize: 15, color: "var(--text-2)", lineHeight: 1.8 }}>
+                Whether optimizing vector embeddings with pgvector & ChromaDB, fine-tuning LLMs, or designing clean user interfaces — I bring an end-to-end mindset from data pipeline to live production deployment.
+              </p>
             </div>
 
-            {/* Interest tags */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {interests.map((item) => (
-                <span key={item} className="tag">{item}</span>
-              ))}
+            {/* Core Competency Tags */}
+            <div className="card" style={{ padding: "20px 24px" }}>
+              <div style={{ fontSize: 11, fontFamily: "var(--mono)", color: "var(--text-3)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 12 }}>
+                Areas of Expertise
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {interests.map((item) => (
+                  <span key={item} className="tag">{item}</span>
+                ))}
+              </div>
             </div>
           </motion.div>
 
-          {/* Right — Bio + Education */}
-          <motion.div {...fadeUp(0.2)} style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          {/* Right Column — Education & Metrics */}
+          <motion.div {...fadeUp(0.2)} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-            {/* Bio card */}
-            <div className="card" style={{ padding: "clamp(24px, 4vw, 36px)" }}>
-              <p style={{ fontSize: 16, color: "var(--text-2)", lineHeight: 1.85, marginBottom: 18 }}>
-                I am <strong style={{ color: "var(--text-1)", fontWeight: 700 }}>Syed Ali Hassan</strong>, a Software Engineer currently pursuing an MS in Artificial Intelligence at UET Lahore.
-              </p>
-              <p style={{ fontSize: 16, color: "var(--text-2)", lineHeight: 1.85, marginBottom: 18 }}>
-                My engineering focus is centered on <strong style={{ color: "var(--cyan)" }}>Agentic AI architectures</strong>, <strong style={{ color: "var(--cyan)" }}>RAG pipelines</strong>, and full-stack software development. I build self-healing agents, multi-agent research tools, and fast inferencing backends integrated with modern React frontends.
-              </p>
-              <p style={{ fontSize: 16, color: "var(--text-2)", lineHeight: 1.85 }}>
-                Whether deploying fine-tuned LLMs, optimizing vector databases (pgvector/ChromaDB), or constructing intuitive web applications — I bring an end-to-end mindset from data pipeline to live production deployment.
-              </p>
+            {/* Highlights row */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 12 }}>
+              {highlights.map((h) => (
+                <div key={h.label} className="card" style={{ padding: "16px 18px", textAlign: "left" }}>
+                  <div style={{ fontSize: "clamp(22px, 3.5vw, 28px)", fontWeight: 800, background: "var(--grad-primary)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", letterSpacing: "-0.03em" }}>
+                    {h.metric}
+                  </div>
+                  <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--text-1)", marginTop: 4 }}>
+                    {h.label}
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {/* Education */}
+            {/* Education Cards */}
             <div>
-              <p className="skill-group-title" style={{ marginBottom: 14 }}>Education & Academics</p>
+              <p className="skill-group-title" style={{ marginBottom: 12 }}>Education & Academics</p>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {education.map(({ degree, school, period, status, detail }) => (
                   <div
                     key={degree}
                     style={{
-                      padding: "20px 22px",
+                      padding: "18px 20px",
                       background: "var(--surface)",
                       border: `1px solid ${status === "current" ? "var(--border-accent)" : "var(--border)"}`,
                       borderRadius: "var(--r-md)",
@@ -137,11 +139,11 @@ export default function About() {
                       alignItems: "flex-start",
                       flexWrap: "wrap",
                       gap: 8,
-                      marginBottom: 8,
+                      marginBottom: 6,
                     }}>
                       <div>
                         <h3 style={{ fontSize: 15, fontWeight: 700, color: "var(--text-1)" }}>{degree}</h3>
-                        <p style={{ fontSize: 13, color: "var(--cyan)", fontFamily: "var(--mono)", marginTop: 3 }}>{school}</p>
+                        <p style={{ fontSize: 12.5, color: "var(--cyan)", fontFamily: "var(--mono)", marginTop: 2 }}>{school}</p>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
                         {status === "current" && (
