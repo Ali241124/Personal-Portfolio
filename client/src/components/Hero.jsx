@@ -121,14 +121,14 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* ── RIGHT: Profile card (Shown ONLY on this first screen) ── */}
+          {/* ── RIGHT: Profile Photo ── */}
           <motion.div
             initial={{ opacity: 0, scale: 0.94, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="hero-card"
           >
-            {/* Photo container */}
+            {/* Clean Photo container without overlays or badges */}
             <div style={{
               width: "100%",
               aspectRatio: "4/5",
@@ -139,6 +139,7 @@ export default function Hero() {
               position: "relative",
               maxWidth: 380,
               margin: "0 auto",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
             }}>
               <img
                 src="/profile.jpeg"
@@ -149,41 +150,6 @@ export default function Hero() {
                   e.currentTarget.parentElement.innerHTML += `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:72px;font-weight:800;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">AH</div>`;
                 }}
               />
-              {/* Gradient overlay at bottom */}
-              <div style={{
-                position: "absolute", bottom: 0, left: 0, right: 0, height: "40%",
-                background: "linear-gradient(to top, rgba(10,10,18,0.92) 0%, transparent 100%)",
-              }}/>
-              {/* Name chip */}
-              <div style={{
-                position: "absolute", bottom: 16, left: 16, right: 16,
-                background: "rgba(18,18,31,0.85)",
-                backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
-                border: "1px solid var(--border-hover)",
-                borderRadius: 12, padding: "10px 14px",
-              }}>
-                <div style={{ fontWeight: 700, fontSize: 14.5, color: "var(--text-1)" }}>Syed Ali Hassan</div>
-                <div style={{ fontSize: 12, color: "var(--violet)", fontFamily: "var(--mono)", marginTop: 2 }}>AI/ML Engineer</div>
-              </div>
-            </div>
-
-            {/* Info pills */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 14, maxWidth: 380, margin: "14px auto 0" }}>
-              {[
-                { label: "🎓", text: "MS AI — UET Lahore", accent: false },
-                { label: "💡", text: "Focus: Agentic AI & RAG Pipelines", accent: true },
-                { label: "📍", text: "Lahore, Pakistan (Remote-friendly)", accent: false },
-              ].map(({ label, text, accent }) => (
-                <div key={text} style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  padding: "9px 14px", borderRadius: 8,
-                  background: accent ? "rgba(139,92,246,0.1)" : "var(--surface)",
-                  border: `1px solid ${accent ? "var(--border-accent)" : "var(--border)"}`,
-                }}>
-                  <span style={{ fontSize: 15 }}>{label}</span>
-                  <span style={{ fontSize: 13, color: accent ? "var(--violet)" : "var(--text-2)", fontWeight: accent ? 600 : 400 }}>{text}</span>
-                </div>
-              ))}
             </div>
           </motion.div>
         </div>
