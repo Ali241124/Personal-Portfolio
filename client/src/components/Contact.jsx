@@ -5,19 +5,12 @@ import axios from "axios";
 export default function Contact() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
-  const [copied, setCopied] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(null); // { type: "success"|"error", text: "" }
 
   const directEmail = "syedali.hassan2040@gmail.com";
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(directEmail);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2200);
-  };
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -165,45 +158,6 @@ export default function Contact() {
               <span>{directEmail}</span>
             </a>
 
-            {/* Copy Address Button */}
-            <button
-              onClick={handleCopyEmail}
-              aria-label="Copy email address"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "12px 20px",
-                background: "rgba(255, 255, 255, 0.04)",
-                border: "1px solid var(--border-hover)",
-                borderRadius: 100,
-                color: copied ? "var(--cyan)" : "var(--text-1)",
-                fontFamily: "var(--font)",
-                fontSize: 13.5,
-                fontWeight: 500,
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                outline: "none",
-              }}
-              className="contact-copy-btn"
-            >
-              {copied ? (
-                <>
-                  <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                  <span>Copy Address</span>
-                </>
-              )}
-            </button>
-
             {/* Toggle Send Message Form Button */}
             <button
               onClick={() => setShowForm(!showForm)}
@@ -211,7 +165,7 @@ export default function Contact() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 8,
-                padding: "12px 22px",
+                padding: "13px 24px",
                 background: showForm ? "rgba(139, 92, 246, 0.18)" : "rgba(255, 255, 255, 0.05)",
                 border: `1px solid ${showForm ? "var(--violet)" : "var(--border-hover)"}`,
                 borderRadius: 100,
