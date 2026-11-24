@@ -9,6 +9,14 @@ const TYPE_COLORS = {
 
 const timeline = [
   {
+    period: "Nov 2026 – Dec 2026",
+    title: "AI Engineer Intern",
+    place: "MoinSystems ai, Remote (Calgary, Canada)",
+    type: "experience",
+    description: "Developing and integrating AI-powered applications, chatbots, and intelligent automation workflows using LLMs, generative AI tools, and Python, alongside prompt engineering and model evaluation.",
+    tags: ["Generative AI", "LLMs", "Python", "AI Agents", "Prompt Engineering"],
+  },
+  {
     period: "2026 – Present",
     title: "MS in Artificial Intelligence",
     place: "University of Engineering & Technology (UET), Lahore",
