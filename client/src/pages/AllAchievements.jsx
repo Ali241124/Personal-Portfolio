@@ -1,114 +1,102 @@
-import { useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import achievements from "../data/achievements";
 
 export default function AllAchievements() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedIssuer, setSelectedIssuer] = useState("all");
 
-  const filtered = achievements.filter((a) => {
-    return (
-      a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      a.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      a.issuer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (a.badge && a.badge.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-  });
+  // Extract unique issuers for filtering
+  const issuers = useMemo(() => {
+    const list = achievements.map((a) => a.issuer.split("·")[0].trim());
+    return ["all", ...Array.from(new Set(list))];
+  }, []);
+
+  const filtered = useMemo(() => {
+    return achievements.filter((a) => {
+      const matchSearch =
+        a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        a.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        a.badge.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        a.issuer.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchIssuer =
+        selectedIssuer === "all" ||
+        a.issuer.toLowerCase().includes(selectedIssuer.toLowerCase());
+      return matchSearch && matchIssuer;
+    });
+  }, [searchQuery, selectedIssuer]);
 
   return (
-    <div
-      style={{
-        background: "var(--surface-base)",
-        color: "var(--text-primary)",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div style={{ background: "var(--bg)", minHeight: "100vh", color: "var(--text-primary)" }}>
       {/* Top Navbar */}
-      <nav
+      <header
         style={{
           position: "sticky",
           top: 0,
           zIndex: 50,
-          background: "rgba(8,11,16,0.92)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
+          background: "rgba(10, 10, 18, 0.92)",
+          backdropFilter: "blur(16px)",
           borderBottom: "1px solid var(--border)",
-          padding: "16px 24px",
+          padding: "16px 0",
         }}
       >
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: 12,
-          }}
-        >
+        <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Link
             to="/"
             style={{
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
               gap: 8,
-              padding: "7px 16px",
-              background: "var(--surface-raised)",
-              border: "1px solid var(--border)",
-              borderRadius: 8,
-              color: "var(--text-primary)",
-              fontSize: 13,
-              fontWeight: 500,
+              color: "var(--text-secondary)",
+              fontSize: 14,
               textDecoration: "none",
-              transition: "all 0.2s ease",
+              fontFamily: "var(--font-mono)",
             }}
             className="back-btn-hover"
           >
-            ← Back to Home
+            ← Back to Portfolio
           </Link>
-          <span
+          <div style={{ fontSize: 13, fontFamily: "var(--font-mono)", color: "var(--accent)" }}>
+            Credentials Archive
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main style={{ padding: "64px 0 100px" }}>
+        <div className="container">
+          {/* Header */}
+          <div style={{ maxWidth: 700, marginBottom: 40 }}>
+            <span className="section-label">All Accreditations</span>
+            <h1 className="section-title" style={{ marginTop: 12 }}>
+              Verified Credentials & Certifications
+            </h1>
+            <p className="section-sub" style={{ marginTop: 12 }}>
+              Complete archive of professional certifications, specialized technical coursework, and industry-recognized credentials.
+            </p>
+          </div>
+
+          {/* Search & Filter Bar */}
+          <div
             style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 13,
-              color: "var(--text-secondary)",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 16,
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 36,
             }}
           >
-            Syed Ali Hassan · Certifications & Credentials
-          </span>
-        </div>
-      </nav>
-
-      {/* Main Container */}
-      <main ref={ref} style={{ flexGrow: 1, padding: "clamp(32px, 5vw, 64px) 24px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            style={{ marginBottom: 40 }}
-          >
-            <span className="section-label">Verified Record</span>
-            <h1 className="section-title">All Certifications & Credentials</h1>
-            <p className="section-sub">
-              Complete index of formal industry certifications, academic specializations, and professional qualifications.
-            </p>
-          </motion.div>
-
-          {/* Search bar */}
-          <div style={{ maxWidth: 440, marginBottom: 36 }}>
+            {/* Search Input */}
             <input
               type="text"
-              placeholder="Search credentials by title, issuer or domain..."
+              placeholder="Search by title, topic, or issuer..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
                 width: "100%",
+                maxWidth: 360,
                 padding: "10px 14px",
                 background: "var(--surface-card)",
                 border: "1px solid var(--border)",
@@ -119,6 +107,30 @@ export default function AllAchievements() {
                 fontFamily: "var(--font-sans)",
               }}
             />
+
+            {/* Issuer Filter Pills */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {issuers.map((iss) => (
+                <button
+                  key={iss}
+                  onClick={() => setSelectedIssuer(iss)}
+                  style={{
+                    padding: "6px 14px",
+                    borderRadius: 20,
+                    fontSize: 12,
+                    fontFamily: "var(--font-mono)",
+                    background: selectedIssuer === iss ? "var(--violet-glow)" : "rgba(255,255,255,0.03)",
+                    color: selectedIssuer === iss ? "var(--violet)" : "var(--text-secondary)",
+                    border: `1px solid ${selectedIssuer === iss ? "var(--border-accent)" : "var(--border)"}`,
+                    cursor: "pointer",
+                    textTransform: "capitalize",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {iss === "all" ? "All Issuers" : iss}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Grid */}
@@ -156,9 +168,45 @@ export default function AllAchievements() {
                     }}
                   />
 
+                  {/* Certificate Image Preview */}
+                  {item.image && (
+                    <div
+                      style={{
+                        width: "100%",
+                        height: 180,
+                        overflow: "hidden",
+                        position: "relative",
+                        background: "rgba(0, 0, 0, 0.4)",
+                        borderBottom: "1px solid var(--border)",
+                      }}
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        loading="lazy"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "top center",
+                          transition: "transform 0.35s ease",
+                        }}
+                        className="cert-img-preview"
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          background: "linear-gradient(to top, rgba(17, 17, 32, 0.75) 0%, transparent 60%)",
+                          pointerEvents: "none",
+                        }}
+                      />
+                    </div>
+                  )}
+
                   <div
                     style={{
-                      padding: "24px 22px 20px",
+                      padding: "22px 22px 20px",
                       display: "flex",
                       flexDirection: "column",
                       flexGrow: 1,
@@ -169,7 +217,7 @@ export default function AllAchievements() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        marginBottom: 14,
+                        marginBottom: 12,
                       }}
                     >
                       <span
@@ -200,7 +248,7 @@ export default function AllAchievements() {
 
                     <h3
                       style={{
-                        fontSize: 18,
+                        fontSize: 17.5,
                         fontWeight: 700,
                         color: "var(--text-primary)",
                         lineHeight: 1.35,
@@ -214,8 +262,8 @@ export default function AllAchievements() {
                       style={{
                         fontSize: 13,
                         fontFamily: "var(--font-mono)",
-                        color: "var(--accent)",
-                        marginBottom: 14,
+                        color: item.color || "var(--accent)",
+                        marginBottom: 12,
                       }}
                     >
                       {item.issuer}
@@ -223,7 +271,7 @@ export default function AllAchievements() {
 
                     <p
                       style={{
-                        fontSize: 14,
+                        fontSize: 13.5,
                         color: "var(--text-secondary)",
                         lineHeight: 1.65,
                         flexGrow: 1,
@@ -241,7 +289,7 @@ export default function AllAchievements() {
                           rel="noreferrer"
                           className="btn-outline"
                           style={{
-                            padding: "6px 12px",
+                            padding: "6px 13px",
                             fontSize: 11.5,
                             borderRadius: 6,
                             display: "inline-flex",
@@ -298,7 +346,10 @@ export default function AllAchievements() {
         .achievement-card-item:hover {
           border-color: var(--border-strong) !important;
           transform: translateY(-3px);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+          box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+        }
+        .achievement-card-item:hover .cert-img-preview {
+          transform: scale(1.04);
         }
       `}</style>
     </div>

@@ -67,9 +67,47 @@ export default function Achievements() {
                 }}
               />
 
+              {/* Certificate Image Preview Section */}
+              {item.image && (
+                <div
+                  style={{
+                    width: "100%",
+                    height: 180,
+                    overflow: "hidden",
+                    position: "relative",
+                    background: "rgba(0, 0, 0, 0.4)",
+                    borderBottom: "1px solid var(--border)",
+                  }}
+                  className="cert-img-container"
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      objectPosition: "top center",
+                      transition: "transform 0.35s ease",
+                    }}
+                    className="cert-img-preview"
+                  />
+                  {/* Subtle bottom gradient shadow */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "linear-gradient(to top, rgba(17, 17, 32, 0.75) 0%, transparent 60%)",
+                      pointerEvents: "none",
+                    }}
+                  />
+                </div>
+              )}
+
               <div
                 style={{
-                  padding: "24px 22px 20px",
+                  padding: "22px 22px 20px",
                   display: "flex",
                   flexDirection: "column",
                   flexGrow: 1,
@@ -81,7 +119,7 @@ export default function Achievements() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    marginBottom: 14,
+                    marginBottom: 12,
                   }}
                 >
                   <span
@@ -113,7 +151,7 @@ export default function Achievements() {
                 {/* Title */}
                 <h3
                   style={{
-                    fontSize: 18,
+                    fontSize: 17.5,
                     fontWeight: 700,
                     color: "var(--text-primary)",
                     lineHeight: 1.35,
@@ -129,7 +167,7 @@ export default function Achievements() {
                     fontSize: 13,
                     fontFamily: "var(--font-mono)",
                     color: item.color || "var(--accent)",
-                    marginBottom: 14,
+                    marginBottom: 12,
                   }}
                 >
                   {item.issuer}
@@ -138,7 +176,7 @@ export default function Achievements() {
                 {/* Description */}
                 <p
                   style={{
-                    fontSize: 14,
+                    fontSize: 13.5,
                     color: "var(--text-secondary)",
                     lineHeight: 1.65,
                     flexGrow: 1,
@@ -216,7 +254,10 @@ export default function Achievements() {
         .achievement-card-item:hover {
           border-color: var(--border-strong) !important;
           transform: translateY(-3px);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+          box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+        }
+        .achievement-card-item:hover .cert-img-preview {
+          transform: scale(1.04);
         }
       `}</style>
     </section>

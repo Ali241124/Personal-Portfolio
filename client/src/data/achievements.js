@@ -1,4 +1,4 @@
-// Verified certifications & accredited Coursera specializations with direct PDF links
+// Verified certifications & accredited Coursera specializations with preview images and direct PDF links
 const achievements = [
   {
     id: 1,
@@ -9,6 +9,7 @@ const achievements = [
     desc: "Foundational mastery in leveraging generative AI tools, prompt engineering, practical workflow automation, and responsible AI principles.",
     color: "#38bdf8",
     featured: true,
+    image: "/certificates/Google AI Essential.jpg",
     certificate: "/certificates/Google AI Essential.pdf",
   },
   {
@@ -20,6 +21,7 @@ const achievements = [
     desc: "Comprehensive coursework taught by Andrew Ng covering AI technologies, machine learning workflows, business strategy, and data science lifecycles.",
     color: "#a78bfa",
     featured: true,
+    image: "/certificates/AI For Everyone.jpg",
     certificate: "/certificates/AI For Everyone.pdf",
   },
   {
@@ -31,6 +33,7 @@ const achievements = [
     desc: "Deep-dive into generative AI fundamentals, Large Language Models (LLMs), attention-driven transformers, and responsible AI deployment principles.",
     color: "#e879f9",
     featured: true,
+    image: "/certificates/Introduction To Generative AI.jpg",
     certificate: "/certificates/Introduction To Generative AI.pdf",
   },
   {
@@ -42,6 +45,7 @@ const achievements = [
     desc: "Rigorous exploration of supervised and unsupervised machine learning algorithms, model evaluation metrics, regression, and clustering pipelines.",
     color: "#34d399",
     featured: true,
+    image: "/certificates/Machine Learning Introduction For Everyone.jpg",
     certificate: "/certificates/Machine Learning Introduction For Everyone.pdf",
   },
   {
@@ -53,6 +57,7 @@ const achievements = [
     desc: "Core cloud architecture concepts spanning IaaS, PaaS, SaaS, virtualization, multi-cloud strategy, containerization, and modern cloud security.",
     color: "#2dd4bf",
     featured: true,
+    image: "/certificates/Introduction To Cloud Computing.jpg",
     certificate: "/certificates/Introduction To Cloud Computing.pdf",
   },
   {
@@ -64,6 +69,7 @@ const achievements = [
     desc: "Software development lifecycle (SDLC), agile methodologies, architecture patterns, testing principles, and production engineering practices.",
     color: "#fb923c",
     featured: true,
+    image: "/certificates/Introduction To Software Engineering.jpg",
     certificate: "/certificates/Introduction To Software Engineering.pdf",
   },
   {
@@ -75,6 +81,7 @@ const achievements = [
     desc: "Foundational concepts across artificial intelligence systems, neural computing, heuristics, and algorithmic problem-solving methodologies.",
     color: "#818cf8",
     featured: false,
+    image: "/certificates/AI Foundation.jpg",
     certificate: "/certificates/AI Foundation.pdf",
   },
   {
@@ -86,6 +93,7 @@ const achievements = [
     desc: "Essential concepts in artificial intelligence, neural architectures, deep learning terminology, and ethical implications of machine learning systems.",
     color: "#a78bfa",
     featured: false,
+    image: "/certificates/Introduction To AI.jpg",
     certificate: "/certificates/Introduction To AI.pdf",
   },
   {
@@ -97,6 +105,7 @@ const achievements = [
     desc: "Version control mastery, distributed Git workflows, branching strategies, collaborative pull requests, and CI/CD repository automation.",
     color: "#f87171",
     featured: false,
+    image: "/certificates/Github.jpg",
     certificate: "/certificates/Github.pdf",
   },
   {
@@ -108,6 +117,7 @@ const achievements = [
     desc: "Modern ECMAScript programming, asynchronous JavaScript, DOM manipulation, object-oriented concepts, and unit testing with Jest.",
     color: "#facc15",
     featured: false,
+    image: "/certificates/Programming With JavaScript.jpg",
     certificate: "/certificates/Programming With JavaScript.pdf",
   },
   {
@@ -119,6 +129,7 @@ const achievements = [
     desc: "Semantic HTML5 architecture, modern responsive design styling, web accessibility (a11y), and frontend integration standards.",
     color: "#38bdf8",
     featured: false,
+    image: "/certificates/HTML.jpg",
     certificate: "/certificates/HTML.pdf",
   },
   {
@@ -130,6 +141,7 @@ const achievements = [
     desc: "Decentralized cryptographic protocols, consensus mechanisms, smart contract execution models, and distributed ledger technology architectures.",
     color: "#c084fc",
     featured: false,
+    image: "/certificates/Blockchain Course.jpg",
     certificate: "/certificates/Blockchain Course.pdf",
   },
   {
@@ -141,6 +153,7 @@ const achievements = [
     desc: "Advanced data analysis, pivot tables, lookup models, statistical computations, and data visualization techniques.",
     color: "#10b981",
     featured: false,
+    image: "/certificates/Work Smarter with Microsoft Excel.jpg",
     certificate: "/certificates/Work Smarter with Microsoft Excel.pdf",
   },
 ];
