@@ -29,7 +29,7 @@ export default function Achievements() {
           <span className="section-label">Certifications & Accreditations</span>
           <h2 className="section-title">Verified Credentials</h2>
           <p className="section-sub">
-            Formal specializations validating competencies across cloud architecture, neural networks, and modern software design.
+            Formal specializations validating competencies across AI, machine learning, cloud architecture, and modern software engineering.
           </p>
         </motion.div>
 
@@ -128,7 +128,7 @@ export default function Achievements() {
                   style={{
                     fontSize: 13,
                     fontFamily: "var(--font-mono)",
-                    color: "var(--accent)",
+                    color: item.color || "var(--accent)",
                     marginBottom: 14,
                   }}
                 >
@@ -142,10 +142,49 @@ export default function Achievements() {
                     color: "var(--text-secondary)",
                     lineHeight: 1.65,
                     flexGrow: 1,
+                    marginBottom: 18,
                   }}
                 >
                   {item.desc}
                 </p>
+
+                {/* Direct PDF Certificate Link */}
+                {item.certificate && (
+                  <div style={{ marginTop: "auto", paddingTop: 10 }}>
+                    <a
+                      href={item.certificate}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn-outline"
+                      style={{
+                        padding: "7px 14px",
+                        fontSize: 12,
+                        borderRadius: 8,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 7,
+                        color: "var(--text-1)",
+                        borderColor: "var(--border-strong)",
+                        fontFamily: "var(--mono)",
+                        textDecoration: "none",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = item.color || "var(--violet)";
+                        e.currentTarget.style.color = item.color || "var(--violet)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = "var(--border-strong)";
+                        e.currentTarget.style.color = "var(--text-1)";
+                      }}
+                    >
+                      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <span>View Certificate PDF ↗</span>
+                    </a>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
@@ -165,10 +204,10 @@ export default function Achievements() {
           }}
         >
           <span style={{ fontSize: 13, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
-            Showing {featuredAchievements.length} of {achievements.length} accreditations
+            Showing {featuredAchievements.length} of {achievements.length} verified credentials
           </span>
           <Link to="/achievements" className="btn-secondary" style={{ padding: "10px 24px" }}>
-            View Full Credentials Archive →
+            View Full Credentials Archive ({achievements.length}) →
           </Link>
         </motion.div>
       </div>

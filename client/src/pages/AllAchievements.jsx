@@ -227,10 +227,48 @@ export default function AllAchievements() {
                         color: "var(--text-secondary)",
                         lineHeight: 1.65,
                         flexGrow: 1,
+                        marginBottom: 16,
                       }}
                     >
                       {item.desc}
                     </p>
+
+                    {item.certificate && (
+                      <div style={{ marginTop: "auto", paddingTop: 8 }}>
+                        <a
+                          href={item.certificate}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="btn-outline"
+                          style={{
+                            padding: "6px 12px",
+                            fontSize: 11.5,
+                            borderRadius: 6,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 6,
+                            color: "var(--text-1)",
+                            borderColor: "var(--border-strong)",
+                            fontFamily: "var(--mono)",
+                            textDecoration: "none",
+                            transition: "all 0.2s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = item.color || "var(--violet)";
+                            e.currentTarget.style.color = item.color || "var(--violet)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = "var(--border-strong)";
+                            e.currentTarget.style.color = "var(--text-1)";
+                          }}
+                        >
+                          <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          <span>View Certificate PDF ↗</span>
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}
