@@ -75,7 +75,7 @@ const projects = [
     badge: "Object Detection",
     github: "https://github.com/Ali241124/VisionDetect-AI",
     demo: null,
-    featured: true,
+    featured: false,
   },
   {
     title: "Multi-Tool AI Orchestrator",

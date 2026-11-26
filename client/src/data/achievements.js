@@ -2,6 +2,18 @@
 const achievements = [
   {
     id: 1,
+    title: "AI Engineer Internship Certification",
+    issuer: "MoinSystems",
+    date: "2024",
+    badge: "Industry Experience",
+    desc: "Hands-on engineering internship building production AI chatbots, vector retrieval with pgvector, full-stack microservices, and end-to-end LLM integration.",
+    color: "#06b6d4",
+    featured: true,
+    image: "/certificates/MoinSystem-Certificate.png",
+    certificate: "/certificates/MoinSystem-Certificate.png",
+  },
+  {
+    id: 2,
     title: "Google AI Essentials",
     issuer: "Google · Coursera",
     date: "2024",
@@ -13,7 +25,7 @@ const achievements = [
     certificate: "/certificates/Google AI Essential.pdf",
   },
   {
-    id: 2,
+    id: 3,
     title: "AI For Everyone",
     issuer: "DeepLearning.AI · Coursera",
     date: "2024",
@@ -25,7 +37,7 @@ const achievements = [
     certificate: "/certificates/AI For Everyone.pdf",
   },
   {
-    id: 3,
+    id: 4,
     title: "Introduction to Generative AI",
     issuer: "Google Cloud · Coursera",
     date: "2024",
@@ -37,7 +49,7 @@ const achievements = [
     certificate: "/certificates/Introduction To Generative AI.pdf",
   },
   {
-    id: 4,
+    id: 5,
     title: "Machine Learning Introduction for Everyone",
     issuer: "IBM · Coursera",
     date: "2024",
@@ -49,7 +61,7 @@ const achievements = [
     certificate: "/certificates/Machine Learning Introduction For Everyone.pdf",
   },
   {
-    id: 5,
+    id: 6,
     title: "Introduction to Cloud Computing",
     issuer: "IBM · Coursera",
     date: "2024",
@@ -61,19 +73,19 @@ const achievements = [
     certificate: "/certificates/Introduction To Cloud Computing.pdf",
   },
   {
-    id: 6,
+    id: 7,
     title: "Introduction to Software Engineering",
     issuer: "IBM · Coursera",
     date: "2024",
     badge: "Software Engineering",
     desc: "Software development lifecycle (SDLC), agile methodologies, architecture patterns, testing principles, and production engineering practices.",
     color: "#fb923c",
-    featured: true,
+    featured: false,
     image: "/certificates/Introduction To Software Engineering.jpg",
     certificate: "/certificates/Introduction To Software Engineering.pdf",
   },
   {
-    id: 7,
+    id: 8,
     title: "AI Foundations",
     issuer: "Coursera",
     date: "2024",
@@ -85,7 +97,7 @@ const achievements = [
     certificate: "/certificates/AI Foundation.pdf",
   },
   {
-    id: 8,
+    id: 9,
     title: "Introduction to Artificial Intelligence (AI)",
     issuer: "IBM · Coursera",
     date: "2024",
@@ -97,7 +109,7 @@ const achievements = [
     certificate: "/certificates/Introduction To AI.pdf",
   },
   {
-    id: 9,
+    id: 10,
     title: "Getting Started with Git and GitHub",
     issuer: "IBM · Coursera",
     date: "2024",
@@ -109,7 +121,7 @@ const achievements = [
     certificate: "/certificates/Github.pdf",
   },
   {
-    id: 10,
+    id: 11,
     title: "Programming with JavaScript",
     issuer: "Meta · Coursera",
     date: "2024",
@@ -121,7 +133,7 @@ const achievements = [
     certificate: "/certificates/Programming With JavaScript.pdf",
   },
   {
-    id: 11,
+    id: 12,
     title: "Introduction to HTML, CSS, & Web Technologies",
     issuer: "IBM · Coursera",
     date: "2024",
@@ -133,7 +145,7 @@ const achievements = [
     certificate: "/certificates/HTML.pdf",
   },
   {
-    id: 12,
+    id: 13,
     title: "Blockchain Basics & Architecture",
     issuer: "University at Buffalo · Coursera",
     date: "2024",
@@ -145,7 +157,7 @@ const achievements = [
     certificate: "/certificates/Blockchain Course.pdf",
   },
   {
-    id: 13,
+    id: 14,
     title: "Work Smarter with Microsoft Excel",
     issuer: "Microsoft · Coursera",
     date: "2024",
